@@ -136,7 +136,7 @@ export default function FriendsPage() {
           
           <div className="flex-1 overflow-y-auto p-3">
             <h3 className="text-xs font-bold mb-3 px-1 text-white/60">DIRECT MESSAGES</h3>
-            <button className="w-full px-3 py-2.5 rounded-lg text-left mb-2 hover:bg-white/10 text-white/80">
+            <button className={`w-full px-3 py-2.5 rounded-lg text-left mb-2 ${currentTheme.buttonBg} ${currentTheme.buttonHover} ${currentTheme.buttonText}`}>
               <span className="text-sm">+ Invite Friends</span>
             </button>
           </div>
@@ -152,7 +152,7 @@ export default function FriendsPage() {
         
         <div className="flex-1 overflow-y-auto p-3">
           <h3 className="text-xs font-bold mb-3 px-1 text-white/60">DIRECT MESSAGES</h3>
-          <button className="w-full px-3 py-2.5 rounded-lg text-left mb-2 hover:bg-white/10 text-white/80">
+          <button className={`w-full px-3 py-2.5 rounded-lg text-left mb-2 ${currentTheme.buttonBg} ${currentTheme.buttonHover} ${currentTheme.buttonText}`}>
             <span className="text-sm">+ Invite Friends</span>
           </button>
         </div>
@@ -221,7 +221,7 @@ export default function FriendsPage() {
                       <p className={`text-xs ${isDark ? 'text-white/60' : 'text-gray-600'}`}>{friend.status}</p>
                     </div>
                   </div>
-                  <button className={`px-4 py-2 rounded-lg text-sm ${isDark ? 'bg-white/20 hover:bg-white/30 text-white' : 'bg-gray-300 hover:bg-gray-400 text-gray-900'} w-full sm:w-auto`}>
+                  <button className={`px-4 py-2 rounded-lg text-sm ${currentTheme.buttonBg} ${currentTheme.buttonHover} ${currentTheme.buttonText} w-full sm:w-auto`}>
                     Message
                   </button>
                 </div>

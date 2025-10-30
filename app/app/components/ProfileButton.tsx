@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useTheme } from "../ThemeContext";
 
 export default function ProfileButton() {
-  const { isDark, colorMode, setColorMode, theme, setTheme } = useTheme();
+  const { isDark, colorMode, setColorMode, theme, setTheme, currentTheme } = useTheme();
   const [userStatus, setUserStatus] = useState<"active" | "busy" | "away">("active");
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -135,13 +135,13 @@ export default function ProfileButton() {
               <div className="mt-3 p-2.5 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-lg border border-white/20">
                 <h3 className="text-[10px] font-bold text-white mb-1.5">Amp up your profile</h3>
                 <div className="flex gap-1.5">
-                  <button className="flex-1 px-2 py-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white text-[10px] font-semibold rounded border border-white/30 transition-all duration-200 flex items-center justify-center gap-1">
+                  <button className={`flex-1 px-2 py-1.5 backdrop-blur-sm text-[10px] font-semibold rounded border border-white/30 transition-all duration-200 flex items-center justify-center gap-1 ${currentTheme.buttonBg} ${currentTheme.buttonHover} ${currentTheme.buttonText}`}>
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     Get Coins
                   </button>
-                  <button className="flex-1 px-2 py-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white text-[10px] font-semibold rounded border border-white/30 transition-all duration-200 flex items-center justify-center gap-1">
+                  <button className={`flex-1 px-2 py-1.5 backdrop-blur-sm text-[10px] font-semibold rounded border border-white/30 transition-all duration-200 flex items-center justify-center gap-1 ${currentTheme.buttonBg} ${currentTheme.buttonHover} ${currentTheme.buttonText}`}>
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                     </svg>
@@ -312,7 +312,7 @@ export default function ProfileButton() {
               <div className="my-2.5 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
 
               {/* Edit Profile Button */}
-              <button className="w-full px-3 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-semibold rounded-lg border border-white/30 transition-all duration-200 flex items-center justify-center gap-1.5 text-xs">
+              <button className={`w-full px-3 py-2 backdrop-blur-sm font-semibold rounded-lg border border-white/30 transition-all duration-200 flex items-center justify-center gap-1.5 text-xs ${currentTheme.buttonBg} ${currentTheme.buttonHover} ${currentTheme.buttonText}`}>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>

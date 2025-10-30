@@ -51,7 +51,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         divider: 'bg-cyan-200/50',
         chatBg: 'bg-cyan-50/80',
         bgGradient1: 'from-blue-400 via-cyan-400 to-teal-400',
-        bgGradient2: 'from-sky-400 via-cyan-400 to-emerald-400'
+        bgGradient2: 'from-sky-400 via-cyan-400 to-emerald-400',
+        buttonBg: 'bg-cyan-500',
+        buttonHover: 'hover:bg-cyan-600',
+        buttonText: 'text-white'
       },
       dark: { 
         col1: 'from-cyan-600 to-blue-700', 
@@ -63,8 +66,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentHover: 'hover:bg-cyan-400/40',
         divider: 'bg-cyan-200/50',
         chatBg: 'bg-gray-900/60',
-        bgGradient1: 'from-blue-400 via-cyan-400 to-teal-400',
-        bgGradient2: 'from-sky-400 via-cyan-400 to-emerald-400'
+        bgGradient1: 'from-blue-600 via-cyan-600 to-teal-600',
+        bgGradient2: 'from-sky-600 via-cyan-600 to-emerald-600',
+        buttonBg: 'bg-cyan-600',
+        buttonHover: 'hover:bg-cyan-700',
+        buttonText: 'text-white'
       }
     },
     purple: {
@@ -79,7 +85,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         divider: 'bg-purple-200/50',
         chatBg: 'bg-purple-50/80',
         bgGradient1: 'from-purple-400 via-pink-400 to-fuchsia-400',
-        bgGradient2: 'from-violet-400 via-purple-400 to-fuchsia-400'
+        bgGradient2: 'from-violet-400 via-purple-400 to-fuchsia-400',
+        buttonBg: 'bg-purple-500',
+        buttonHover: 'hover:bg-purple-600',
+        buttonText: 'text-white'
       },
       dark: { 
         col1: 'from-purple-600 to-pink-700', 
@@ -91,8 +100,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentHover: 'hover:bg-purple-400/40',
         divider: 'bg-purple-200/50',
         chatBg: 'bg-gray-900/60',
-        bgGradient1: 'from-purple-400 via-pink-400 to-fuchsia-400',
-        bgGradient2: 'from-violet-400 via-purple-400 to-fuchsia-400'
+        bgGradient1: 'from-purple-600 via-pink-600 to-fuchsia-600',
+        bgGradient2: 'from-violet-600 via-purple-600 to-fuchsia-600',
+        buttonBg: 'bg-purple-600',
+        buttonHover: 'hover:bg-purple-700',
+        buttonText: 'text-white'
       }
     },
     green: {
@@ -107,7 +119,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         divider: 'bg-emerald-200/50',
         chatBg: 'bg-emerald-50/80',
         bgGradient1: 'from-emerald-400 via-teal-400 to-green-400',
-        bgGradient2: 'from-teal-400 via-emerald-400 to-cyan-400'
+        bgGradient2: 'from-teal-400 via-emerald-400 to-cyan-400',
+        buttonBg: 'bg-emerald-500',
+        buttonHover: 'hover:bg-emerald-600',
+        buttonText: 'text-white'
       },
       dark: { 
         col1: 'from-emerald-600 to-teal-700', 
@@ -119,8 +134,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentHover: 'hover:bg-emerald-400/40',
         divider: 'bg-emerald-200/50',
         chatBg: 'bg-gray-900/60',
-        bgGradient1: 'from-emerald-400 via-teal-400 to-green-400',
-        bgGradient2: 'from-teal-400 via-emerald-400 to-cyan-400'
+        bgGradient1: 'from-emerald-600 via-teal-600 to-green-600',
+        bgGradient2: 'from-teal-600 via-emerald-600 to-cyan-600',
+        buttonBg: 'bg-emerald-600',
+        buttonHover: 'hover:bg-emerald-700',
+        buttonText: 'text-white'
       }
     },
     orange: {
@@ -135,7 +153,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         divider: 'bg-orange-200/50',
         chatBg: 'bg-orange-50/80',
         bgGradient1: 'from-orange-400 via-amber-400 to-yellow-400',
-        bgGradient2: 'from-amber-400 via-orange-400 to-red-400'
+        bgGradient2: 'from-amber-400 via-orange-400 to-red-400',
+        buttonBg: 'bg-orange-500',
+        buttonHover: 'hover:bg-orange-600',
+        buttonText: 'text-white'
       },
       dark: { 
         col1: 'from-orange-600 to-amber-700', 
@@ -147,8 +168,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentHover: 'hover:bg-orange-400/40',
         divider: 'bg-orange-200/50',
         chatBg: 'bg-gray-900/60',
-        bgGradient1: 'from-orange-400 via-amber-400 to-yellow-400',
-        bgGradient2: 'from-amber-400 via-orange-400 to-red-400'
+        bgGradient1: 'from-orange-600 via-amber-600 to-yellow-600',
+        bgGradient2: 'from-amber-600 via-orange-600 to-red-600',
+        buttonBg: 'bg-orange-600',
+        buttonHover: 'hover:bg-orange-700',
+        buttonText: 'text-white'
       }
     },
     pink: {
@@ -163,7 +187,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         divider: 'bg-pink-200/50',
         chatBg: 'bg-pink-50/80',
         bgGradient1: 'from-pink-400 via-rose-400 to-fuchsia-400',
-        bgGradient2: 'from-rose-400 via-pink-400 to-fuchsia-400'
+        bgGradient2: 'from-rose-400 via-pink-400 to-fuchsia-400',
+        buttonBg: 'bg-pink-500',
+        buttonHover: 'hover:bg-pink-600',
+        buttonText: 'text-white'
       },
       dark: { 
         col1: 'from-pink-600 to-fuchsia-700', 
@@ -175,8 +202,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentHover: 'hover:bg-pink-400/40',
         divider: 'bg-pink-200/50',
         chatBg: 'bg-gray-900/60',
-        bgGradient1: 'from-pink-400 via-rose-400 to-fuchsia-400',
-        bgGradient2: 'from-rose-400 via-pink-400 to-fuchsia-400'
+        bgGradient1: 'from-pink-600 via-rose-600 to-fuchsia-600',
+        bgGradient2: 'from-rose-600 via-pink-600 to-fuchsia-600',
+        buttonBg: 'bg-pink-600',
+        buttonHover: 'hover:bg-pink-700',
+        buttonText: 'text-white'
       }
     }
   };
