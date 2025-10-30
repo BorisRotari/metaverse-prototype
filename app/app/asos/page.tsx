@@ -431,9 +431,9 @@ export default function ASOsPage() {
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                         selectedASO.status === 'active' 
                           ? isDark ? 'bg-green-500/20 text-green-400' : 'bg-green-100 text-green-700'
-                          : selectedASO.status === 'idle'
+                          : selectedASO.status === 'busy'
                           ? isDark ? 'bg-yellow-500/20 text-yellow-400' : 'bg-yellow-100 text-yellow-700'
-                          : isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-700'
+                          : isDark ? 'bg-gray-500/20 text-gray-400' : 'bg-gray-100 text-gray-700'
                       }`}>
                         {selectedASO.status}
                       </span>

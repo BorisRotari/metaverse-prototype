@@ -14,6 +14,7 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
   const isChatRoomsActive = pathname?.startsWith('/app/chat-rooms');
   const isWorkflowActive = pathname?.startsWith('/app/workflow') || pathname?.startsWith('/app/asos') || pathname?.startsWith('/app/skill-cards');
   const isDiscoverActive = pathname?.startsWith('/app/applications') || pathname?.startsWith('/app/spaces');
+  const isMySpacesActive = pathname?.startsWith('/app/my-spaces');
 
   return (
     <div className="flex h-screen overflow-hidden relative">
@@ -82,16 +83,32 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
             </svg>
           </button>
         </Link>
+
+        <div className="w-8 h-0.5 bg-white/30 rounded-full my-1"></div>
+
+        {/* My Spaces */}
+        <Link href="/app/my-spaces/space-001">
+          <button 
+            className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${isMySpacesActive ? 'ring-2 ring-cyan-300 bg-cyan-500/50' : ''}`}
+            title="My Spaces"
+          >
+            <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          </button>
+        </Link>
         
         {/* Add Space */}
-        <button 
-          className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`}
-          title="Add Space"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-          </svg>
-        </button>
+        <Link href="/app/spaces">
+          <button 
+            className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200`}
+            title="Add Space"
+          >
+            <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
+        </Link>
       </div>
 
       {/* Children (other columns) */}

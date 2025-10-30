@@ -117,6 +117,45 @@ html::-webkit-scrollbar {
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
+/* Styled scrollbar for sidebars and lists */
+.styled-scrollbar {
+  overflow-y: scroll !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+.styled-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  display: block !important;
+}
+
+.styled-scrollbar::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+.styled-scrollbar::-webkit-scrollbar-button:vertical:start:decrement,
+.styled-scrollbar::-webkit-scrollbar-button:vertical:end:increment {
+  display: none;
+}
+
+.styled-scrollbar::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 10px;
+  margin: 4px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
 /* Custom animations for gradient background */
 @keyframes gradient-xy {
   0%, 100% {

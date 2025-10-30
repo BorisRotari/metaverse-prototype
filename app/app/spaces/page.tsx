@@ -17,11 +17,18 @@ export default function SpacesPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
   const [showFeatured, setShowFeatured] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newSpaceName, setNewSpaceName] = useState("");
+  const [newSpaceDesc, setNewSpaceDesc] = useState("");
+  const [newSpaceCategory, setNewSpaceCategory] = useState("Technology");
+  const [newSpaceVisibility, setNewSpaceVisibility] = useState<"Public" | "Private">("Public");
+  const [allowAI, setAllowAI] = useState(true);
 
   const isChatRoomsActive = pathname?.startsWith('/app/chat-rooms') || false;
   const isDirectMessageActive = pathname?.startsWith('/app/friends') || pathname?.startsWith('/app/shop') || pathname?.startsWith('/app/quests') || false;
   const isWorkflowActive = pathname?.startsWith('/app/workflow') || pathname?.startsWith('/app/asos') || pathname?.startsWith('/app/skill-cards') || false;
   const isDiscoverActive = pathname?.startsWith('/app/applications') || pathname?.startsWith('/app/spaces') || false;
+  const isMySpacesActive = pathname?.startsWith('/app/my-spaces') || false;
 
   // Get unique categories
   const categories = ["All", ...Array.from(new Set(mockSpaces.map(space => space.category)))];
@@ -128,13 +135,28 @@ export default function SpacesPage() {
             </button>
           </Link>
 
+          <div className="w-8 h-0.5 bg-white/30 rounded-full my-1"></div>
+
+          <Link href="/app/my-spaces/space-001" onClick={() => setShowMobileMenu(false)}>
+            <button 
+              className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
+              title="My Spaces"
+            >
+              <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            </button>
+          </Link>
+
           <div className="flex-1"></div>
 
-          <button className="w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200" title="Add Space">
-            <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
-          </button>
+          <Link href="/app/spaces" onClick={() => setShowMobileMenu(false)}>
+            <button className="w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200" title="Add Space">
+              <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </Link>
         </div>
 
         {/* Column 2 - Mobile */}
@@ -288,6 +310,16 @@ export default function SpacesPage() {
                   {filteredSpaces.length} {filteredSpaces.length === 1 ? 'space' : 'spaces'} found
                 </p>
               </div>
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className={`px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
+                  isDark
+                    ? 'bg-green-500 hover:bg-green-600 text-white'
+                    : 'bg-green-500 hover:bg-green-600 text-white'
+                }`}
+              >
+                + Create Space
+              </button>
             </div>
             
             {/* Search Bar */}
@@ -527,6 +559,237 @@ export default function SpacesPage() {
                   }`}
                 >
                   Preview
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Space Modal */}
+      {showCreateModal && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
+          onClick={() => setShowCreateModal(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className={`w-full max-w-2xl rounded-xl overflow-hidden border ${
+              isDark
+                ? 'bg-gray-800/95 border-white/20'
+                : 'bg-white/95 border-gray-300'
+            }`}
+          >
+            {/* Header */}
+            <div className={`p-6 border-b ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
+              <div className="flex items-center justify-between">
+                <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  Create Your Space
+                </h2>
+                <button
+                  onClick={() => setShowCreateModal(false)}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                    isDark ? 'hover:bg-white/10' : 'hover:bg-gray-200'
+                  }`}
+                >
+                  <svg className={`w-5 h-5 ${isDark ? 'text-white' : 'text-gray-900'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <p className={`text-sm mt-2 ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
+                Create a collaborative space where humans and AI work together
+              </p>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 max-h-[calc(90vh-12rem)] overflow-y-auto styled-scrollbar">
+              <div className="space-y-4">
+                {/* Space Name */}
+                <div>
+                  <label className={`block text-sm font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    Space Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={newSpaceName}
+                    onChange={(e) => setNewSpaceName(e.target.value)}
+                    placeholder="e.g., AI Innovation Lab"
+                    className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 ${
+                      isDark
+                        ? 'bg-white/10 border-white/20 text-white placeholder-white/40 focus:bg-white/15 focus:border-cyan-400/50'
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-cyan-500'
+                    }`}
+                  />
+                </div>
+
+                {/* Description */}
+                <div>
+                  <label className={`block text-sm font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    Description *
+                  </label>
+                  <textarea
+                    value={newSpaceDesc}
+                    onChange={(e) => setNewSpaceDesc(e.target.value)}
+                    placeholder="Describe what your space is about..."
+                    rows={3}
+                    className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 resize-none ${
+                      isDark
+                        ? 'bg-white/10 border-white/20 text-white placeholder-white/40 focus:bg-white/15 focus:border-cyan-400/50'
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-cyan-500'
+                    }`}
+                  />
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label className={`block text-sm font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    Category *
+                  </label>
+                  <select
+                    value={newSpaceCategory}
+                    onChange={(e) => setNewSpaceCategory(e.target.value)}
+                    className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 ${
+                      isDark
+                        ? 'bg-white/10 border-white/20 text-white focus:bg-white/15 focus:border-cyan-400/50'
+                        : 'bg-white border-gray-300 text-gray-900 focus:border-cyan-500'
+                    }`}
+                  >
+                    <option value="Technology">Technology</option>
+                    <option value="Business">Business</option>
+                    <option value="Creative Arts">Creative Arts</option>
+                    <option value="Education">Education</option>
+                    <option value="Gaming">Gaming</option>
+                    <option value="Music">Music</option>
+                    <option value="Lifestyle">Lifestyle</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Finance">Finance</option>
+                  </select>
+                </div>
+
+                {/* Visibility */}
+                <div>
+                  <label className={`block text-sm font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    Visibility
+                  </label>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setNewSpaceVisibility("Public")}
+                      className={`flex-1 p-4 rounded-lg border transition-all duration-200 ${
+                        newSpaceVisibility === "Public"
+                          ? isDark
+                            ? 'bg-cyan-500/20 border-cyan-400/50 text-white'
+                            : 'bg-cyan-400/30 border-cyan-500 text-gray-900'
+                          : isDark
+                            ? 'bg-white/5 border-white/20 text-white/70 hover:bg-white/10'
+                            : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      <div className="text-2xl mb-2">🌍</div>
+                      <div className="font-bold mb-1">Public</div>
+                      <div className="text-xs opacity-70">Anyone can discover and join</div>
+                    </button>
+                    <button
+                      onClick={() => setNewSpaceVisibility("Private")}
+                      className={`flex-1 p-4 rounded-lg border transition-all duration-200 ${
+                        newSpaceVisibility === "Private"
+                          ? isDark
+                            ? 'bg-cyan-500/20 border-cyan-400/50 text-white'
+                            : 'bg-cyan-400/30 border-cyan-500 text-gray-900'
+                          : isDark
+                            ? 'bg-white/5 border-white/20 text-white/70 hover:bg-white/10'
+                            : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      <div className="text-2xl mb-2">🔒</div>
+                      <div className="font-bold mb-1">Private</div>
+                      <div className="text-xs opacity-70">Invite-only access</div>
+                    </button>
+                  </div>
+                </div>
+
+                {/* AI Collaboration */}
+                <div className={`p-4 rounded-lg border ${isDark ? 'bg-white/5 border-white/10' : 'bg-gray-50 border-gray-200'}`}>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-2xl">🤖</span>
+                        <h3 className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          AI Collaboration
+                        </h3>
+                      </div>
+                      <p className={`text-sm ${isDark ? 'text-white/70' : 'text-gray-700'}`}>
+                        Allow AI assistants (ASOs) to join and collaborate in your space
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setAllowAI(!allowAI)}
+                      className={`relative w-12 h-6 rounded-full transition-colors ${
+                        allowAI
+                          ? 'bg-green-500'
+                          : isDark ? 'bg-white/20' : 'bg-gray-300'
+                      }`}
+                    >
+                      <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
+                        allowAI ? 'left-[26px]' : 'left-0.5'
+                      }`}></div>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Info Box */}
+                <div className={`p-4 rounded-lg border ${isDark ? 'bg-cyan-500/10 border-cyan-400/30' : 'bg-cyan-50 border-cyan-200'}`}>
+                  <div className="flex gap-3">
+                    <svg className={`w-5 h-5 flex-shrink-0 ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`} fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                    <div>
+                      <p className={`text-sm font-medium mb-1 ${isDark ? 'text-cyan-300' : 'text-cyan-900'}`}>
+                        What you'll get:
+                      </p>
+                      <ul className={`text-sm space-y-1 ${isDark ? 'text-cyan-400/80' : 'text-cyan-800'}`}>
+                        <li>• Dedicated channels for text, voice, and workflows</li>
+                        <li>• Project and task management tools</li>
+                        <li>• Resource sharing and collaboration</li>
+                        <li>• AI-powered automation and assistance</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className={`p-6 border-t ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowCreateModal(false)}
+                  className={`flex-1 py-3 rounded-lg font-medium transition-all duration-200 ${
+                    isDark
+                      ? 'bg-white/10 hover:bg-white/15 text-white border border-white/20'
+                      : 'bg-gray-200 hover:bg-gray-300 text-gray-900 border border-gray-300'
+                  }`}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    // In a real app, this would create the space
+                    console.log("Creating space:", { newSpaceName, newSpaceDesc, newSpaceCategory, newSpaceVisibility, allowAI });
+                    window.location.href = `/app/my-spaces/space-001`;
+                  }}
+                  disabled={!newSpaceName || !newSpaceDesc}
+                  className={`flex-1 py-3 rounded-lg font-bold transition-all duration-200 ${
+                    !newSpaceName || !newSpaceDesc
+                      ? isDark
+                        ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : isDark
+                        ? 'bg-green-500 hover:bg-green-600 text-white'
+                        : 'bg-green-500 hover:bg-green-600 text-white'
+                  }`}
+                >
+                  Create Space
                 </button>
               </div>
             </div>
