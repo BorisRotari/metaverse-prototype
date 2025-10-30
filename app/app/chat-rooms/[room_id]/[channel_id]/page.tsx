@@ -27,23 +27,24 @@ export default function ChatRoomPage({
   const [showControlMenu, setShowControlMenu] = useState(false);
   const [displayMode, setDisplayMode] = useState<'grid' | 'speaker' | 'sidebar'>('grid');
   const [voiceMessage, setVoiceMessage] = useState("");
-  const [colorMode, setColorMode] = useState<'light' | 'dark' | 'system'>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('colorMode');
-      return (saved as 'light' | 'dark' | 'system') || 'dark';
-    }
-    return 'dark';
-  });
-  const [theme, setTheme] = useState<'blue' | 'purple' | 'green' | 'orange' | 'pink'>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('theme');
-      return (saved as 'blue' | 'purple' | 'green' | 'orange' | 'pink') || 'blue';
-    }
-    return 'blue';
-  });
+  const [colorMode, setColorMode] = useState<'light' | 'dark' | 'system'>('dark');
+  const [theme, setTheme] = useState<'blue' | 'purple' | 'green' | 'orange' | 'pink'>('blue');
   const [expandedMessageId, setExpandedMessageId] = useState<string | null>(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showVoiceEmojiPicker, setShowVoiceEmojiPicker] = useState(false);
+
+  // Load color mode and theme from localStorage on mount (client-side only)
+  useEffect(() => {
+    const savedColorMode = localStorage.getItem('colorMode');
+    const savedTheme = localStorage.getItem('theme');
+    
+    if (savedColorMode) {
+      setColorMode(savedColorMode as 'light' | 'dark' | 'system');
+    }
+    if (savedTheme) {
+      setTheme(savedTheme as 'blue' | 'purple' | 'green' | 'orange' | 'pink');
+    }
+  }, []);
 
   // Persist color mode and theme to localStorage
   useEffect(() => {
