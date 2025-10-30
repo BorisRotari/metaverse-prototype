@@ -14,7 +14,7 @@ export default function CollaborativeSpacePage({ params }: { params: Promise<{ s
   const unwrappedParams = use(params);
   const { isDark, currentTheme } = useTheme();
   const pathname = usePathname();
-  const [activeTab, setActiveTab] = useState<"overview" | "projects" | "tasks" | "members" | "resources">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "projects" | "tasks" | "resources">("overview");
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
@@ -226,14 +226,6 @@ export default function CollaborativeSpacePage({ params }: { params: Promise<{ s
               ✅ Tasks ({space.stats.completedTasks}/{space.stats.totalTasks})
             </button>
             <button
-              onClick={() => setActiveTab("members")}
-              className={`w-full px-3 py-2 rounded-lg text-left text-sm transition-all duration-200 mb-1 ${
-                activeTab === "members" ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-white/70'
-              }`}
-            >
-              👥 Members
-            </button>
-            <button
               onClick={() => setActiveTab("resources")}
               className={`w-full px-3 py-2 rounded-lg text-left text-sm transition-all duration-200 ${
                 activeTab === "resources" ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-white/70'
@@ -341,14 +333,6 @@ export default function CollaborativeSpacePage({ params }: { params: Promise<{ s
             }`}
           >
             ✅ Tasks ({space.stats.completedTasks}/{space.stats.totalTasks})
-          </button>
-          <button
-            onClick={() => setActiveTab("members")}
-            className={`w-full px-3 py-2 rounded-lg text-left text-sm transition-all duration-200 mb-1 ${
-              activeTab === "members" ? 'bg-white/20 text-white' : 'hover:bg-white/10 text-white/70'
-            }`}
-          >
-            👥 Members
           </button>
           <button
             onClick={() => setActiveTab("resources")}
@@ -684,107 +668,6 @@ export default function CollaborativeSpacePage({ params }: { params: Promise<{ s
                   </div>
                 );
               })}
-            </div>
-          )}
-
-          {/* Members Tab */}
-          {activeTab === "members" && (
-            <div className="space-y-6 max-w-6xl">
-              {/* Humans Section */}
-              <div>
-                <h3 className={`text-xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  👥 Human Members ({humans.length})
-                </h3>
-                <div className="grid gap-4">
-                  {humans.map((member) => (
-                    <div
-                      key={member.id}
-                      className={`backdrop-blur-md rounded-xl p-4 border ${isDark ? 'bg-white/10 border-white/20' : 'bg-white/60 border-white/30'}`}
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="relative">
-                          <div className="text-5xl">{member.avatar}</div>
-                          <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 ${isDark ? 'border-gray-800' : 'border-white'} ${getStatusColor(member.status)}`}></div>
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1 flex-wrap">
-                            <h4 className={`font-bold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              {member.displayName}
-                            </h4>
-                            <span className={`px-2 py-1 rounded text-xs ${isDark ? 'bg-white/10 text-white/60' : 'bg-gray-200 text-gray-700'}`}>
-                              Level {member.level}
-                            </span>
-                            <span className={`px-2 py-1 rounded text-xs ${isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-800'}`}>
-                              {member.role}
-                            </span>
-                          </div>
-                          <p className={`text-sm mb-2 ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
-                            @{member.username}
-                          </p>
-                          <div className="flex flex-wrap gap-2 mb-2">
-                            {member.skills.map((skill, idx) => (
-                              <span key={idx} className={`px-2 py-1 rounded text-xs ${isDark ? 'bg-cyan-500/20 text-cyan-400' : 'bg-cyan-100 text-cyan-800'}`}>
-                                {skill}
-                              </span>
-                            ))}
-                          </div>
-                          <div className={`text-sm ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
-                            {member.contributions} contributions • Joined {new Date(member.joinedAt).toLocaleDateString()}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* AI Assistants Section */}
-              <div>
-                <h3 className={`text-xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  🤖 AI Assistants ({ais.length})
-                </h3>
-                <div className="grid gap-4">
-                  {ais.map((member) => (
-                    <div
-                      key={member.id}
-                      className={`backdrop-blur-md rounded-xl p-4 border ${isDark ? 'bg-white/10 border-white/20' : 'bg-white/60 border-white/30'}`}
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="relative">
-                          <div className="text-5xl">{member.avatar}</div>
-                          <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 ${isDark ? 'border-gray-800' : 'border-white'} ${getStatusColor(member.status)}`}></div>
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1 flex-wrap">
-                            <h4 className={`font-bold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                              {member.displayName}
-                            </h4>
-                            <span className={`px-2 py-1 rounded text-xs ${isDark ? 'bg-cyan-500/20 text-cyan-400' : 'bg-cyan-100 text-cyan-800'}`}>
-                              Level {member.level} AI
-                            </span>
-                            <span className={`px-2 py-1 rounded text-xs ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
-                              {member.role}
-                            </span>
-                          </div>
-                          <p className={`text-sm mb-2 ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
-                            @{member.username}
-                          </p>
-                          <div className="flex flex-wrap gap-2 mb-2">
-                            {member.skills.map((skill, idx) => (
-                              <span key={idx} className={`px-2 py-1 rounded text-xs ${isDark ? 'bg-purple-500/20 text-purple-400' : 'bg-purple-100 text-purple-800'}`}>
-                                {skill}
-                              </span>
-                            ))}
-                          </div>
-                          <div className={`text-sm ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
-                            {member.contributions} contributions • Active since {new Date(member.joinedAt).toLocaleDateString()}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
 
