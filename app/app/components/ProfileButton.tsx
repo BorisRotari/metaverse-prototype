@@ -75,7 +75,7 @@ export default function ProfileButton() {
           onClick={() => setShowProfileModal(false)}
         >
           <div 
-            className="bg-white/10 backdrop-blur-xl rounded-2xl max-w-xs w-full shadow-2xl border border-white/20 overflow-hidden my-auto"
+            className="bg-white/10 backdrop-blur-xl rounded-2xl max-w-sm w-full shadow-2xl border border-white/20 overflow-hidden my-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Banner Background - Extended with Image */}

@@ -14,8 +14,10 @@ export default function QuestsPage() {
   const pathname = usePathname();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
+  const isChatRoomsActive = pathname?.startsWith('/app/chat-rooms') || false;
   const isDirectMessageActive = pathname?.startsWith('/app/friends') || pathname?.startsWith('/app/shop') || pathname?.startsWith('/app/quests');
-  const isChatRoomsActive = pathname?.startsWith('/app/chat-rooms');
+  const isWorkflowActive = pathname?.startsWith('/app/workflow') || pathname?.startsWith('/app/asos') || pathname?.startsWith('/app/skill-cards') || false;
+  const isDiscoverActive = pathname?.startsWith('/app/applications') || pathname?.startsWith('/app/spaces') || false;
 
   const quests = [
     { id: 1, title: "Daily Check-in", description: "Log in daily for 7 days", progress: 5, total: 7, reward: "50 Coins", icon: "📅" },
@@ -35,11 +37,11 @@ export default function QuestsPage() {
       )}
 
       {/* Mobile Header */}
-      <div className={`md:hidden fixed top-0 left-0 right-0 z-[60] backdrop-blur-md border-b ${isDark ? 'bg-gray-900/60 border-white/20' : 'bg-white/80 border-gray-300'}`}>
+      <div className={`md:hidden fixed top-0 left-0 right-0 z-[60] backdrop-blur-md border-b ${isDark ? 'bg-gray-900/60 border-white/20' : 'bg-white/80 border-gray-300'} ${showMobileMenu ? 'pointer-events-none' : ''}`}>
         <div className="h-14 px-4 flex items-center justify-between">
           <button
             onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className={`w-10 h-10 backdrop-blur-md rounded-lg flex items-center justify-center transition-all duration-200 border ${
+            className={`w-10 h-10 backdrop-blur-md rounded-lg flex items-center justify-center transition-all duration-200 border pointer-events-auto ${
               isDark 
                 ? 'bg-white/20 hover:bg-white/30 border-white/30' 
                 : 'bg-white/40 hover:bg-white/60 border-white/30'
@@ -61,7 +63,7 @@ export default function QuestsPage() {
         {/* Column 1 - Mobile */}
         <div className={`w-[70px] h-full bg-gradient-to-b ${currentTheme.col1} border-r border-white/20 flex flex-col items-center py-3 gap-2`}>
           <Link href="/" onClick={() => setShowMobileMenu(false)}>
-            <button className="w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200">
+            <button className="w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200">
               <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
               </svg>
@@ -72,7 +74,7 @@ export default function QuestsPage() {
           
           <Link href={`/app/chat-rooms/1/${CHANNEL_IDS.general}`} onClick={() => setShowMobileMenu(false)}>
             <button 
-              className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${isChatRoomsActive ? 'ring-2 ring-cyan-300 bg-cyan-500/50' : ''}`}
+              className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${isChatRoomsActive ? 'ring-2 ring-cyan-300 bg-cyan-500/50' : ''}`}
               title="Message In Space"
             >
               <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -83,7 +85,7 @@ export default function QuestsPage() {
           
           <Link href="/app/friends" onClick={() => setShowMobileMenu(false)}>
             <button 
-              className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${isDirectMessageActive ? 'ring-2 ring-cyan-300 bg-cyan-500/50' : ''}`}
+              className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${isDirectMessageActive ? 'ring-2 ring-cyan-300 bg-cyan-500/50' : ''}`}
               title="Direct Message"
             >
               <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -91,29 +93,33 @@ export default function QuestsPage() {
               </svg>
             </button>
           </Link>
+
+          <Link href="/app/asos" onClick={() => setShowMobileMenu(false)}>
+            <button 
+              className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${isWorkflowActive ? 'ring-2 ring-cyan-300 bg-cyan-500/50' : ''}`}
+              title="Workflow"
+            >
+              <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+              </svg>
+            </button>
+          </Link>
           
-          <button 
-            className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
-            title="Workflow"
-          >
-            <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-          </button>
-          
-          <button 
-            className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
-            title="Discover"
-          >
-            <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
+          <Link href="/app/applications" onClick={() => setShowMobileMenu(false)}>
+            <button 
+              className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${isDiscoverActive ? 'ring-2 ring-cyan-300 bg-cyan-500/50' : ''}`}
+              title="Discover"
+            >
+              <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
+          </Link>
           
           <div className="flex-1"></div>
           
           <button 
-            className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
+            className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
             title="Add Space"
           >
             <svg className={`w-6 h-6 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -144,8 +150,8 @@ export default function QuestsPage() {
         <DMNavigation />
         
         <div className="flex-1 overflow-y-auto p-3">
-          <h3 className={`text-xs font-bold mb-3 px-1 ${isDark ? 'text-white/60' : 'text-gray-600'}`}>DIRECT MESSAGES</h3>
-          <button className={`w-full px-3 py-2.5 rounded-lg text-left mb-2 ${isDark ? 'hover:bg-white/10 text-white/80' : 'hover:bg-white/20 text-gray-700'}`}>
+          <h3 className="text-xs font-bold mb-3 px-1 text-white/60">DIRECT MESSAGES</h3>
+          <button className="w-full px-3 py-2.5 rounded-lg text-left mb-2 hover:bg-white/10 text-white/80">
             <span className="text-sm">+ Invite Friends</span>
           </button>
         </div>
@@ -155,7 +161,7 @@ export default function QuestsPage() {
 
       {/* COLUMN 3 */}
       <div className="relative z-10 flex-1 flex flex-col md:mt-0 mt-14">
-        <div className={`absolute inset-0 ${isDark ? 'bg-gray-900/60' : 'bg-white/80'} backdrop-blur-md`}></div>
+        <div className={`absolute inset-0 ${currentTheme.chatBg} backdrop-blur-md`}></div>
         <div className="relative flex-1 flex flex-col">
           <div className={`h-12 px-4 flex items-center gap-4 border-b ${isDark ? 'border-white/20' : 'border-gray-300'} flex-shrink-0 hidden md:flex`}>
             <svg className={`w-5 h-5 ${isDark ? 'text-white' : 'text-gray-900'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">

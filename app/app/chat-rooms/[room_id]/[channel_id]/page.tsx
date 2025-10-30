@@ -173,14 +173,14 @@ export default function ChatRoomPage({
       )}
 
       {/* Mobile Header - Single Row */}
-      <div className={`md:hidden fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b ${isDark ? 'bg-gray-900/60 border-white/20' : `${currentTheme.chatBg} border-gray-300`}`}>
+      <div className={`md:hidden fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b ${isDark ? 'bg-gray-900/60 border-white/20' : `${currentTheme.chatBg} border-gray-300`} ${showMobileMenu ? 'pointer-events-none' : ''}`}>
         <div className="h-14 px-4 flex items-center justify-between">
           {/* Menu Icon - Opens both columns together */}
           <button
             onClick={() => {
               setShowMobileMenu(!showMobileMenu);
             }}
-            className={`w-10 h-10 backdrop-blur-md rounded-lg flex items-center justify-center transition-all duration-200 border ${
+            className={`w-10 h-10 backdrop-blur-md rounded-lg flex items-center justify-center transition-all duration-200 border pointer-events-auto ${
               isDark 
                 ? 'bg-white/20 hover:bg-white/30 border-white/30' 
                 : 'bg-white/40 hover:bg-white/60 border-white/30'
@@ -235,7 +235,7 @@ export default function ChatRoomPage({
         {/* Column 1 - Mobile */}
         <div className={`w-[70px] h-full bg-gradient-to-b ${currentTheme.col1} border-r border-white/20 flex flex-col items-center py-3 gap-2`}>
           <Link href="/" onClick={() => setShowMobileMenu(false)}>
-            <button className="w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200">
+            <button className="w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200">
             <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
@@ -246,7 +246,7 @@ export default function ChatRoomPage({
         
           <Link href={`/app/chat-rooms/1/${CHANNEL_IDS.general}`} onClick={() => setShowMobileMenu(false)}>
         <button 
-              className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${isChatRoomsActive ? 'ring-2 ring-cyan-300 bg-cyan-500/50' : ''}`}
+              className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${isChatRoomsActive ? 'ring-2 ring-cyan-300 bg-cyan-500/50' : ''}`}
               title="Message In Space"
         >
           <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -257,7 +257,7 @@ export default function ChatRoomPage({
         
           <Link href="/app/friends" onClick={() => setShowMobileMenu(false)}>
         <button 
-              className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${isDirectMessageActive ? 'ring-2 ring-cyan-300 bg-cyan-500/50' : ''}`}
+              className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${isDirectMessageActive ? 'ring-2 ring-cyan-300 bg-cyan-500/50' : ''}`}
               title="Direct Message"
         >
           <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -267,7 +267,7 @@ export default function ChatRoomPage({
           </Link>
         
         <button 
-            className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
+            className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
             title="Workflow"
         >
           <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -276,7 +276,7 @@ export default function ChatRoomPage({
         </button>
         
           <button 
-            className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
+            className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
             title="Discover"
           >
             <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -287,7 +287,7 @@ export default function ChatRoomPage({
           <div className="flex-1"></div>
           
           <button 
-            className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
+            className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
             title="Add Space"
           >
             <svg className={`w-6 h-6 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -769,7 +769,7 @@ export default function ChatRoomPage({
               <div className="flex items-center gap-1">
                 <span>▼</span> VOICE CHANNELS
               </div>
-              <button className={`opacity-0 group-hover:opacity-100 hover:bg-white/30 rounded p-0.5 transition-all duration-200 ${isDark ? 'text-white' : 'text-gray-900'}`} title="Create Channel">
+              <button className="opacity-0 group-hover:opacity-100 hover:bg-white/30 rounded p-0.5 transition-all duration-200 text-white" title="Create Channel">
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
