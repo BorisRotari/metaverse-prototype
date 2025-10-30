@@ -134,7 +134,7 @@ export default function ChatRoomPage({
 
   const handleChannelClick = (channelName: keyof typeof CHANNEL_IDS) => {
     const channelId = CHANNEL_IDS[channelName];
-    router.push(`/chat-rooms/1/${channelId}`);
+    router.push(`/app/chat-rooms/1/${channelId}`);
     setShowMobileMenu(false);
   };
 
@@ -173,7 +173,7 @@ export default function ChatRoomPage({
 
   const handleVoiceChannelClick = (channelName: keyof typeof CHANNEL_IDS) => {
     const channelId = CHANNEL_IDS[channelName];
-    router.push(`/chat-rooms/1/${channelId}`);
+    router.push(`/app/chat-rooms/1/${channelId}`);
     setShowMobileMenu(false);
     // Automatically connect to voice channel
     const channelData = getChannelData(channelId);
