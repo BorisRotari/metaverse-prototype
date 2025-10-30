@@ -383,7 +383,7 @@ export default function SkillCardsPage() {
           ></div>
           
           {/* Modal Content */}
-          <div className={`relative w-full max-w-xl rounded-xl backdrop-blur-md border overflow-hidden ${
+          <div className={`relative w-full max-w-xl max-h-[85vh] rounded-xl backdrop-blur-md border overflow-hidden ${
             isDark 
               ? 'bg-gray-900/90 border-white/20' 
               : 'bg-white/90 border-gray-300'
@@ -434,8 +434,8 @@ export default function SkillCardsPage() {
               </div>
             </div>
 
-            {/* Body */}
-            <div className="p-4 space-y-4">
+            {/* Body - Scrollable */}
+            <div className="p-4 space-y-4 overflow-y-auto max-h-[calc(85vh-100px)] chat-scrollbar">
               {/* Description */}
               <div>
                 <h3 className={`text-xs font-bold mb-2 uppercase tracking-wide ${
@@ -481,7 +481,7 @@ export default function SkillCardsPage() {
               </div>
 
               {/* Creator & Stats */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <div className={`p-3 rounded-lg backdrop-blur-md border ${
                   isDark 
                     ? 'bg-white/10 border-white/20' 
@@ -529,30 +529,6 @@ export default function SkillCardsPage() {
                   </div>
                   <div className={`text-sm font-bold ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`}>
                     {selectedCard.uses} times
-                  </div>
-                </div>
-                <div className={`p-3 rounded-lg backdrop-blur-md border ${
-                  isDark 
-                    ? 'bg-white/10 border-white/20' 
-                    : 'bg-white/40 border-white/30'
-                }`}>
-                  <div className={`text-xs mb-1 ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
-                    Steps
-                  </div>
-                  <div className={`text-sm font-bold ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`}>
-                    {selectedCard.steps}
-                  </div>
-                </div>
-                <div className={`p-3 rounded-lg backdrop-blur-md border ${
-                  isDark 
-                    ? 'bg-white/10 border-white/20' 
-                    : 'bg-white/40 border-white/30'
-                }`}>
-                  <div className={`text-xs mb-1 ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
-                    Est. Time
-                  </div>
-                  <div className={`text-sm font-bold ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`}>
-                    {selectedCard.estimatedTime}
                   </div>
                 </div>
               </div>
