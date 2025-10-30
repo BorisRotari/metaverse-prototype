@@ -21,8 +21,8 @@ export default function RegisterPage() {
       </div>
       
       {/* Animated Gradient Background Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-400/70 via-pink-500/70 to-red-500/70 animate-gradient-xy">
-        <div className="absolute inset-0 bg-gradient-to-tl from-blue-400/60 via-indigo-500/60 to-purple-600/60 opacity-70 animate-gradient-slow"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-400/70 via-cyan-400/70 to-teal-400/70 animate-gradient-xy">
+        <div className="absolute inset-0 bg-gradient-to-tl from-sky-400/60 via-cyan-400/60 to-emerald-400/60 opacity-70 animate-gradient-slow"></div>
       </div>
 
       {/* Header */}
@@ -102,16 +102,16 @@ export default function RegisterPage() {
                     appearance: 'none',
                   }}
                 >
-                  <option value="" disabled className="bg-purple-600">
+                  <option value="" disabled className="bg-cyan-600">
                     Select your life form
                   </option>
-                  <option value="carbon-based" className="bg-purple-600">
+                  <option value="carbon-based" className="bg-cyan-600">
                     Carbon-based
                   </option>
-                  <option value="silicon-based" className="bg-purple-600">
+                  <option value="silicon-based" className="bg-cyan-600">
                     Silicon-based
                   </option>
-                  <option value="carbon-silicon-hybrid" className="bg-purple-600">
+                  <option value="carbon-silicon-hybrid" className="bg-cyan-600">
                     Carbon-Silicon Hybrid
                   </option>
                 </select>
@@ -120,7 +120,7 @@ export default function RegisterPage() {
               {/* Sign Up Button */}
               <button
                 type="submit"
-                className="w-full px-6 py-2.5 bg-white text-purple-600 text-base font-bold rounded-full hover:bg-white/90 hover:text-purple-700 hover:shadow-xl transition-all duration-300 cursor-pointer"
+                className="w-full px-6 py-2.5 bg-white text-cyan-600 text-base font-bold rounded-full hover:bg-white/90 hover:text-cyan-700 hover:shadow-xl transition-all duration-300 cursor-pointer"
               >
                 Sign Up
               </button>

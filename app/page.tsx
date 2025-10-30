@@ -17,8 +17,8 @@ export default function Home() {
       </div>
       
       {/* Animated Gradient Background Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-400/70 via-pink-500/70 to-red-500/70 animate-gradient-xy">
-        <div className="absolute inset-0 bg-gradient-to-tl from-blue-400/60 via-indigo-500/60 to-purple-600/60 opacity-70 animate-gradient-slow"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-400/70 via-cyan-400/70 to-teal-400/70 animate-gradient-xy">
+        <div className="absolute inset-0 bg-gradient-to-tl from-sky-400/60 via-cyan-400/60 to-emerald-400/60 opacity-70 animate-gradient-slow"></div>
       </div>
 
       {/* Header */}
@@ -90,11 +90,11 @@ export default function Home() {
       {/* Bottom Buttons - Bottom Center */}
       <footer className="relative z-10 flex flex-col items-center gap-4 px-6">
         <div className="flex flex-col sm:flex-row gap-4 w-full max-w-2xl">
-          <button className="flex-1 px-8 py-3 bg-white text-purple-600 text-base font-bold rounded-full hover:bg-white/90 hover:text-purple-700 transition-all duration-300 shadow-xl whitespace-nowrap cursor-pointer">
+          <button className="flex-1 px-8 py-3 bg-white text-cyan-600 text-base font-bold rounded-full hover:bg-white/90 hover:text-cyan-700 transition-all duration-300 shadow-xl whitespace-nowrap cursor-pointer">
             Download For Windows
           </button>
           
-          <Link href={`/chat-rooms/1/${CHANNEL_IDS.general}`} className="flex-1">
+          <Link href={`/app/chat-rooms/1/${CHANNEL_IDS.general}`} className="flex-1">
             <button className="w-full px-8 py-3 bg-white/20 backdrop-blur-md text-white text-base font-semibold rounded-full border-2 border-white/30 hover:bg-white/40 hover:border-white/50 transition-all duration-300 shadow-xl whitespace-nowrap cursor-pointer">
               Open In Your Browser
             </button>
