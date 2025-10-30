@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --scrollbar-track: rgba(200, 200, 200, 0.3);
+  --scrollbar-thumb: rgba(150, 150, 150, 0.5);
+  --scrollbar-thumb-hover: rgba(100, 100, 100, 0.7);
 }
 
 @theme inline {
@@ -16,6 +19,9 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --scrollbar-track: rgba(255, 255, 255, 0.1);
+    --scrollbar-thumb: rgba(255, 255, 255, 0.3);
+    --scrollbar-thumb-hover: rgba(255, 255, 255, 0.5);
   }
 }
 
@@ -39,9 +45,15 @@ html::-webkit-scrollbar {
 }
 
 /* Custom scrollbar for chat messages */
+.chat-scrollbar {
+  overflow-y: scroll !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
 .chat-scrollbar::-webkit-scrollbar {
-  width: 8px;
-  display: block;
+  width: 10px;
+  display: block !important;
 }
 
 .chat-scrollbar::-webkit-scrollbar-button {
@@ -56,25 +68,19 @@ html::-webkit-scrollbar {
 }
 
 .chat-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--scrollbar-track);
   border-radius: 10px;
   margin: 4px;
 }
 
 .chat-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--scrollbar-thumb);
   border-radius: 10px;
   transition: background 0.2s;
 }
 
 .chat-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
-
-/* Firefox scrollbar */
-.chat-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+  background: var(--scrollbar-thumb-hover);
 }
 
 /* Horizontal scrollbar for thumbnails */
@@ -90,25 +96,25 @@ html::-webkit-scrollbar {
 }
 
 .horizontal-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--scrollbar-track);
   border-radius: 10px;
   margin: 4px;
 }
 
 .horizontal-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--scrollbar-thumb);
   border-radius: 10px;
   transition: background 0.2s;
 }
 
 .horizontal-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--scrollbar-thumb-hover);
 }
 
 /* Firefox horizontal scrollbar */
 .horizontal-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 /* Custom animations for gradient background */

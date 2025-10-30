@@ -45,7 +45,7 @@ export default function ApplicationsPage() {
           </button>
           
           <div className="flex items-center gap-2">
-            <span className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Applications</span>
+            <span className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Apps</span>
           </div>
           
           <div className="w-10"></div>
