@@ -18,8 +18,8 @@ function AppLayoutContent({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen overflow-hidden relative">
       {/* Animated background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-400 via-cyan-400 to-teal-400 animate-gradient-xy">
-        <div className="absolute inset-0 bg-gradient-to-tl from-sky-400 via-cyan-400 to-emerald-400 opacity-70 animate-gradient-slow"></div>
+      <div className={`fixed inset-0 bg-gradient-to-br ${currentTheme.bgGradient1} animate-gradient-xy`}>
+        <div className={`absolute inset-0 bg-gradient-to-tl ${currentTheme.bgGradient2} opacity-70 animate-gradient-slow`}></div>
       </div>
 
       {/* COLUMN 1: Fixed Server Navigation */}

@@ -49,7 +49,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentRing: 'ring-cyan-300',
         accentHover: 'hover:bg-cyan-400/40',
         divider: 'bg-cyan-200/50',
-        chatBg: 'bg-cyan-50/80'
+        chatBg: 'bg-cyan-50/80',
+        bgGradient1: 'from-blue-400 via-cyan-400 to-teal-400',
+        bgGradient2: 'from-sky-400 via-cyan-400 to-emerald-400'
       },
       dark: { 
         col1: 'from-cyan-600 to-blue-700', 
@@ -60,7 +62,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentRing: 'ring-cyan-300',
         accentHover: 'hover:bg-cyan-400/40',
         divider: 'bg-cyan-200/50',
-        chatBg: 'bg-gray-900/60'
+        chatBg: 'bg-gray-900/60',
+        bgGradient1: 'from-blue-400 via-cyan-400 to-teal-400',
+        bgGradient2: 'from-sky-400 via-cyan-400 to-emerald-400'
       }
     },
     purple: {
@@ -73,7 +77,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentRing: 'ring-purple-300',
         accentHover: 'hover:bg-purple-400/40',
         divider: 'bg-purple-200/50',
-        chatBg: 'bg-purple-50/80'
+        chatBg: 'bg-purple-50/80',
+        bgGradient1: 'from-purple-400 via-pink-400 to-fuchsia-400',
+        bgGradient2: 'from-violet-400 via-purple-400 to-fuchsia-400'
       },
       dark: { 
         col1: 'from-purple-600 to-pink-700', 
@@ -84,7 +90,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentRing: 'ring-purple-300',
         accentHover: 'hover:bg-purple-400/40',
         divider: 'bg-purple-200/50',
-        chatBg: 'bg-gray-900/60'
+        chatBg: 'bg-gray-900/60',
+        bgGradient1: 'from-purple-400 via-pink-400 to-fuchsia-400',
+        bgGradient2: 'from-violet-400 via-purple-400 to-fuchsia-400'
       }
     },
     green: {
@@ -97,7 +105,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentRing: 'ring-emerald-300',
         accentHover: 'hover:bg-emerald-400/40',
         divider: 'bg-emerald-200/50',
-        chatBg: 'bg-emerald-50/80'
+        chatBg: 'bg-emerald-50/80',
+        bgGradient1: 'from-emerald-400 via-teal-400 to-green-400',
+        bgGradient2: 'from-teal-400 via-emerald-400 to-cyan-400'
       },
       dark: { 
         col1: 'from-emerald-600 to-teal-700', 
@@ -108,7 +118,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentRing: 'ring-emerald-300',
         accentHover: 'hover:bg-emerald-400/40',
         divider: 'bg-emerald-200/50',
-        chatBg: 'bg-gray-900/60'
+        chatBg: 'bg-gray-900/60',
+        bgGradient1: 'from-emerald-400 via-teal-400 to-green-400',
+        bgGradient2: 'from-teal-400 via-emerald-400 to-cyan-400'
       }
     },
     orange: {
@@ -121,7 +133,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentRing: 'ring-orange-300',
         accentHover: 'hover:bg-orange-400/40',
         divider: 'bg-orange-200/50',
-        chatBg: 'bg-orange-50/80'
+        chatBg: 'bg-orange-50/80',
+        bgGradient1: 'from-orange-400 via-amber-400 to-yellow-400',
+        bgGradient2: 'from-amber-400 via-orange-400 to-red-400'
       },
       dark: { 
         col1: 'from-orange-600 to-amber-700', 
@@ -132,7 +146,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentRing: 'ring-orange-300',
         accentHover: 'hover:bg-orange-400/40',
         divider: 'bg-orange-200/50',
-        chatBg: 'bg-gray-900/60'
+        chatBg: 'bg-gray-900/60',
+        bgGradient1: 'from-orange-400 via-amber-400 to-yellow-400',
+        bgGradient2: 'from-amber-400 via-orange-400 to-red-400'
       }
     },
     pink: {
@@ -145,7 +161,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentRing: 'ring-pink-300',
         accentHover: 'hover:bg-pink-400/40',
         divider: 'bg-pink-200/50',
-        chatBg: 'bg-pink-50/80'
+        chatBg: 'bg-pink-50/80',
+        bgGradient1: 'from-pink-400 via-rose-400 to-fuchsia-400',
+        bgGradient2: 'from-rose-400 via-pink-400 to-fuchsia-400'
       },
       dark: { 
         col1: 'from-pink-600 to-fuchsia-700', 
@@ -156,7 +174,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         accentRing: 'ring-pink-300',
         accentHover: 'hover:bg-pink-400/40',
         divider: 'bg-pink-200/50',
-        chatBg: 'bg-gray-900/60'
+        chatBg: 'bg-gray-900/60',
+        bgGradient1: 'from-pink-400 via-rose-400 to-fuchsia-400',
+        bgGradient2: 'from-rose-400 via-pink-400 to-fuchsia-400'
       }
     }
   };
