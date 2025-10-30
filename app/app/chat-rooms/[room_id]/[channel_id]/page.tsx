@@ -2,8 +2,11 @@
 
 import { useState, useEffect, use } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { getChannelData, CHANNEL_IDS, type Channel, type Message, type VoiceUser } from "@/app/data/mockChannelData";
+import { useTheme } from "../../../ThemeContext";
+import ProfileButton from "../../../components/ProfileButton";
+import ServerHeader from "../../../components/ServerHeader";
 
 export default function ChatRoomPage({
   params,
@@ -12,8 +15,14 @@ export default function ChatRoomPage({
 }) {
   const resolvedParams = use(params);
   const router = useRouter();
+  const pathname = usePathname();
+  const { colorMode, setColorMode, theme, setTheme, isDark, currentTheme, themes } = useTheme();
   const [selectedServer, setSelectedServer] = useState("planet");
   const [message, setMessage] = useState("");
+  
+  // Check active routes
+  const isChatRoomsActive = pathname?.startsWith('/app/chat-rooms') || false;
+  const isDirectMessageActive = pathname?.startsWith('/app/friends') || pathname?.startsWith('/app/shop') || pathname?.startsWith('/app/quests') || false;
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [currentChannel, setCurrentChannel] = useState<Channel | null>(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -27,60 +36,9 @@ export default function ChatRoomPage({
   const [showControlMenu, setShowControlMenu] = useState(false);
   const [displayMode, setDisplayMode] = useState<'grid' | 'speaker' | 'sidebar'>('grid');
   const [voiceMessage, setVoiceMessage] = useState("");
-  const [colorMode, setColorMode] = useState<'light' | 'dark' | 'system'>('dark');
-  const [theme, setTheme] = useState<'blue' | 'purple' | 'green' | 'orange' | 'pink'>('blue');
   const [expandedMessageId, setExpandedMessageId] = useState<string | null>(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showVoiceEmojiPicker, setShowVoiceEmojiPicker] = useState(false);
-
-  // Load color mode and theme from localStorage on mount (client-side only)
-  useEffect(() => {
-    const savedColorMode = localStorage.getItem('colorMode');
-    const savedTheme = localStorage.getItem('theme');
-    
-    if (savedColorMode) {
-      setColorMode(savedColorMode as 'light' | 'dark' | 'system');
-    }
-    if (savedTheme) {
-      setTheme(savedTheme as 'blue' | 'purple' | 'green' | 'orange' | 'pink');
-    }
-  }, []);
-
-  // Persist color mode and theme to localStorage
-  useEffect(() => {
-    localStorage.setItem('colorMode', colorMode);
-  }, [colorMode]);
-
-  useEffect(() => {
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  // Theme colors
-  const themes = {
-    blue: {
-      light: { from: 'from-blue-400', via: 'via-cyan-400', to: 'to-teal-400', accent: 'cyan', col1: 'from-cyan-300 to-blue-400', col2: 'from-cyan-400 to-blue-500', iconColor: 'text-gray-700', iconColorDark: 'text-white', accentBg: 'bg-cyan-500/30', accentRing: 'ring-cyan-300', accentHover: 'hover:bg-cyan-400/40', divider: 'bg-cyan-200/50' },
-      dark: { from: 'from-blue-400', via: 'via-cyan-400', to: 'to-teal-400', accent: 'cyan', col1: 'from-cyan-600 to-blue-700', col2: 'from-cyan-700 to-blue-800', iconColor: 'text-gray-700', iconColorDark: 'text-white', accentBg: 'bg-cyan-500/30', accentRing: 'ring-cyan-300', accentHover: 'hover:bg-cyan-400/40', divider: 'bg-cyan-200/50' }
-    },
-    purple: {
-      light: { from: 'from-purple-400', via: 'via-pink-400', to: 'to-rose-400', accent: 'purple', col1: 'from-purple-300 to-pink-400', col2: 'from-purple-400 to-pink-500', iconColor: 'text-gray-700', iconColorDark: 'text-white', accentBg: 'bg-purple-500/30', accentRing: 'ring-purple-300', accentHover: 'hover:bg-purple-400/40', divider: 'bg-purple-200/50' },
-      dark: { from: 'from-purple-400', via: 'via-pink-400', to: 'to-rose-400', accent: 'purple', col1: 'from-purple-600 to-pink-700', col2: 'from-purple-700 to-pink-800', iconColor: 'text-gray-700', iconColorDark: 'text-white', accentBg: 'bg-purple-500/30', accentRing: 'ring-purple-300', accentHover: 'hover:bg-purple-400/40', divider: 'bg-purple-200/50' }
-    },
-    green: {
-      light: { from: 'from-emerald-400', via: 'via-teal-400', to: 'to-cyan-400', accent: 'emerald', col1: 'from-emerald-300 to-teal-400', col2: 'from-emerald-400 to-teal-500', iconColor: 'text-gray-700', iconColorDark: 'text-white', accentBg: 'bg-emerald-500/30', accentRing: 'ring-emerald-300', accentHover: 'hover:bg-emerald-400/40', divider: 'bg-emerald-200/50' },
-      dark: { from: 'from-emerald-400', via: 'via-teal-400', to: 'to-cyan-400', accent: 'emerald', col1: 'from-emerald-600 to-teal-700', col2: 'from-emerald-700 to-teal-800', iconColor: 'text-gray-700', iconColorDark: 'text-white', accentBg: 'bg-emerald-500/30', accentRing: 'ring-emerald-300', accentHover: 'hover:bg-emerald-400/40', divider: 'bg-emerald-200/50' }
-    },
-    orange: {
-      light: { from: 'from-orange-400', via: 'via-amber-400', to: 'to-yellow-400', accent: 'orange', col1: 'from-orange-300 to-amber-400', col2: 'from-orange-400 to-amber-500', iconColor: 'text-gray-700', iconColorDark: 'text-white', accentBg: 'bg-orange-500/30', accentRing: 'ring-orange-300', accentHover: 'hover:bg-orange-400/40', divider: 'bg-orange-200/50' },
-      dark: { from: 'from-orange-400', via: 'via-amber-400', to: 'to-yellow-400', accent: 'orange', col1: 'from-orange-600 to-amber-700', col2: 'from-orange-700 to-amber-800', iconColor: 'text-gray-700', iconColorDark: 'text-white', accentBg: 'bg-orange-500/30', accentRing: 'ring-orange-300', accentHover: 'hover:bg-orange-400/40', divider: 'bg-orange-200/50' }
-    },
-    pink: {
-      light: { from: 'from-pink-400', via: 'via-fuchsia-400', to: 'to-purple-400', accent: 'pink', col1: 'from-pink-300 to-fuchsia-400', col2: 'from-pink-400 to-fuchsia-500', iconColor: 'text-gray-700', iconColorDark: 'text-white', accentBg: 'bg-pink-500/30', accentRing: 'ring-pink-300', accentHover: 'hover:bg-pink-400/40', divider: 'bg-pink-200/50' },
-      dark: { from: 'from-pink-400', via: 'via-fuchsia-400', to: 'to-purple-400', accent: 'pink', col1: 'from-pink-600 to-fuchsia-700', col2: 'from-pink-700 to-fuchsia-800', iconColor: 'text-gray-700', iconColorDark: 'text-white', accentBg: 'bg-pink-500/30', accentRing: 'ring-pink-300', accentHover: 'hover:bg-pink-400/40', divider: 'bg-pink-200/50' }
-    }
-  };
-
-  const isDark = colorMode === 'dark' || (colorMode === 'system' && true); // For now, system defaults to dark
-  const currentTheme = themes[theme][isDark ? 'dark' : 'light'];
 
   // Emoji categories
   const emojiCategories = {
@@ -203,12 +161,7 @@ export default function ChatRoomPage({
   };
 
   return (
-    <div className="relative flex h-screen overflow-hidden">
-      {/* Animated Gradient Background */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${currentTheme.from} ${currentTheme.via} ${currentTheme.to} animate-gradient-xy`}>
-        <div className={`absolute inset-0 bg-gradient-to-tl ${currentTheme.from} ${currentTheme.via} ${currentTheme.to} opacity-70 animate-gradient-slow`}></div>
-      </div>
-
+    <>
       {/* Dark Overlay - Show when menu is open on mobile */}
       {showMobileMenu && (
         <div 
@@ -220,7 +173,7 @@ export default function ChatRoomPage({
       )}
 
       {/* Mobile Header - Single Row */}
-      <div className={`md:hidden fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b ${isDark ? 'bg-gray-900/60 border-white/20' : 'bg-white/80 border-gray-300'}`}>
+      <div className={`md:hidden fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b ${isDark ? 'bg-gray-900/60 border-white/20' : `${currentTheme.chatBg} border-gray-300`}`}>
         <div className="h-14 px-4 flex items-center justify-between">
           {/* Menu Icon - Opens both columns together */}
           <button
@@ -230,7 +183,7 @@ export default function ChatRoomPage({
             className={`w-10 h-10 backdrop-blur-md rounded-lg flex items-center justify-center transition-all duration-200 border ${
               isDark 
                 ? 'bg-white/20 hover:bg-white/30 border-white/30' 
-                : 'bg-gray-200 hover:bg-gray-300 border-gray-300'
+                : 'bg-white/40 hover:bg-white/60 border-white/30'
             }`}
           >
             <svg className={`w-6 h-6 ${isDark ? 'text-white' : 'text-gray-900'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -277,90 +230,86 @@ export default function ChatRoomPage({
         </div>
       </div>
 
-      {/* COLUMN 1: Server Navigation Sidebar */}
-      <div className={`${showMobileMenu ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 fixed md:relative z-[60] w-[70px] h-full bg-gradient-to-b ${currentTheme.col1} md:bg-white/10 md:backdrop-blur-lg border-r border-white/20 flex flex-col items-center py-3 gap-2 transition-transform duration-300 ${showMobileMenu ? "top-0" : "top-0"} md:top-auto shadow-2xl md:shadow-none`}>
-        {/* Home */}
-        <Link href="/">
-          <button className="w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200">
+      {/* Mobile Combined Sidebar (Column 1 + Column 2) */}
+      <div className={`md:hidden fixed inset-y-0 left-0 z-[70] flex transition-transform duration-300 ${showMobileMenu ? "translate-x-0" : "-translate-x-full"}`}>
+        {/* Column 1 - Mobile */}
+        <div className={`w-[70px] h-full bg-gradient-to-b ${currentTheme.col1} border-r border-white/20 flex flex-col items-center py-3 gap-2`}>
+          <Link href="/" onClick={() => setShowMobileMenu(false)}>
+            <button className="w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200">
             <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
           </button>
         </Link>
         
-        <div className={`w-8 h-0.5 ${currentTheme.divider} rounded-full my-1`}></div>
+          <div className="w-8 h-0.5 bg-white/30 rounded-full my-1"></div>
         
-        {/* Servers */}
+          <Link href={`/app/chat-rooms/1/${CHANNEL_IDS.general}`} onClick={() => setShowMobileMenu(false)}>
         <button 
-          onClick={() => setSelectedServer("planet")}
-          className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${selectedServer === "planet" ? `!${currentTheme.accentBg} ${currentTheme.accentRing} ring-2` : ""}`}
+              className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${isChatRoomsActive ? 'ring-2 ring-cyan-300 bg-cyan-500/50' : ''}`}
+              title="Message In Space"
         >
           <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
         </button>
+          </Link>
         
-        {/* Shopping */}
+          <Link href="/app/friends" onClick={() => setShowMobileMenu(false)}>
         <button 
-          onClick={() => setSelectedServer("shop")}
-          className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${selectedServer === "shop" ? `!${currentTheme.accentBg} ${currentTheme.accentRing} ring-2` : ""}`}
+              className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${isDirectMessageActive ? 'ring-2 ring-cyan-300 bg-cyan-500/50' : ''}`}
+              title="Direct Message"
         >
           <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
           </svg>
         </button>
+          </Link>
         
-        {/* Skill Card */}
         <button 
-          onClick={() => setSelectedServer("skillcard")}
-          className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${selectedServer === "skillcard" ? `!${currentTheme.accentBg} ${currentTheme.accentRing} ring-2` : ""}`}
+            className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
+            title="Workflow"
         >
           <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
-        </button>
-
-        <button 
-          onClick={() => setSelectedServer("quest")}
-          className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${selectedServer === "quest" ? `!${currentTheme.accentBg} ${currentTheme.accentRing} ring-2` : ""}`}
-        >
-          <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
           </svg>
         </button>
         
-        {/* Add Server */}
-        <button className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center ${currentTheme.accentHover} transition-all duration-200 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`}>
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+          <button 
+            className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
+            title="Discover"
+          >
+            <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </button>
-      </div>
-
-      {/* COLUMN 2: Channel List & User Profile */}
-      <div className={`${showMobileMenu ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 fixed md:relative z-[60] w-60 h-full bg-gradient-to-b ${currentTheme.col2} md:bg-white/10 md:backdrop-blur-lg border-r border-white/20 flex flex-col transition-transform duration-300 ${showMobileMenu ? "top-0 left-[70px]" : "top-0"} md:top-auto md:left-auto shadow-2xl md:shadow-none`}>
-        {/* Server Header - Hidden on mobile */}
-        <div className="hidden md:flex h-12 px-4 items-center justify-between border-b border-white/20 hover:bg-white/10 cursor-pointer">
-          <h2 className={`font-bold drop-shadow-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>BoloboloMi</h2>
-          <span className={`text-xs ${isDark ? 'text-white' : 'text-gray-900'}`}>▼</span>
+          
+          <div className="flex-1"></div>
+          
+          <button 
+            className={`w-11 h-11 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative`}
+            title="Add Space"
+          >
+            <svg className={`w-6 h-6 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
         </div>
 
-        {/* Mobile Header for Sidebar - Only visible on mobile when sidebar is open */}
-        <div className="md:hidden h-[56px] px-4 flex flex-col justify-center border-b border-white/30">
-          <h2 className={`font-bold drop-shadow-lg text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>BoloboloMi Server</h2>
-          <p className={`text-xs mt-1 ${isDark ? 'text-white/90' : 'text-gray-700'}`}>Select a channel to chat</p>
-        </div>
+        {/* Column 2 - Mobile */}
+        <div className={`w-60 h-full bg-gradient-to-b ${currentTheme.col2} border-r border-white/20 flex flex-col`}>
+          <ServerHeader description="Select a channel to chat" />
 
         {/* Action Buttons - Create Category & Invite Member */}
         <div className="px-2 py-2 border-b border-white/20 space-y-1.5">
-          <button className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 w-full font-medium border ${isDark ? 'text-white/90 border-white/30' : 'text-gray-800 border-gray-700/30'}`}>
-            <svg className={`w-4 h-4 ${isDark ? 'text-white' : 'text-gray-800'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 w-full font-medium border ${isDark ? 'text-white/90 border-white/30' : 'text-white/90 border-white/30'}`}>
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
             Create Category
           </button>
-          <button className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 w-full font-medium border ${isDark ? 'text-white/90 border-white/30' : 'text-gray-800 border-gray-700/30'}`}>
-            <svg className={`w-4 h-4 ${isDark ? 'text-white' : 'text-gray-800'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 w-full font-medium border ${isDark ? 'text-white/90 border-white/30' : 'text-white/90 border-white/30'}`}>
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
             </svg>
             Invite Member
@@ -371,7 +320,7 @@ export default function ChatRoomPage({
         <div className="flex-1 overflow-y-auto px-2 py-2 chat-scrollbar">{/* Added custom scrollbar styling */}
           {/* TEXT CHANNELS */}
           <div className="mb-4">
-            <div className={`text-xs font-bold px-2 mb-1 flex items-center justify-between drop-shadow group ${isDark ? 'text-white/80' : 'text-gray-900'}`}>
+            <div className={`text-xs font-bold px-2 mb-1 flex items-center justify-between drop-shadow group ${isDark ? 'text-white/80' : 'text-white/80'}`}>
               <div className="flex items-center gap-1">
                 <span>▼</span> TEXT CHANNELS
               </div>
@@ -385,7 +334,7 @@ export default function ChatRoomPage({
             <div className="space-y-0.5">
               <div 
                 onClick={() => handleChannelClick('welcome')}
-                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-gray-800'}`}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
               >
                 <div className="flex items-center gap-2">
                   <span className={isDark ? 'text-white/60' : 'text-gray-600'}>#</span> welcome
@@ -404,19 +353,19 @@ export default function ChatRoomPage({
               </div>
               <div 
                 onClick={() => handleChannelClick('announcements')}
-                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-gray-800'}`}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
               >
                 <span className="text-white/60">#</span> announcements
               </div>
               <div 
                 onClick={() => handleChannelClick('team-leads')}
-                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-gray-800'}`}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
               >
                 <span className="text-white/60">🔒</span> team-leads
               </div>
               <div 
                 onClick={() => handleChannelClick('ai-research')}
-                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-gray-800'}`}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
               >
                 <div className="flex items-center gap-2">
                   <span className={isDark ? 'text-white/60' : 'text-gray-600'}>🔒</span> ai-research
@@ -425,7 +374,7 @@ export default function ChatRoomPage({
               </div>
               <div 
                 onClick={() => handleChannelClick('vip-lounge')}
-                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-gray-800'}`}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
               >
                 <span className="text-white/60">🔒</span> vip-lounge
               </div>
@@ -434,7 +383,7 @@ export default function ChatRoomPage({
 
           {/* COMMUNICATION */}
           <div className="mb-4">
-            <div className={`text-xs font-bold px-2 mb-1 flex items-center justify-between drop-shadow group ${isDark ? 'text-white/80' : 'text-gray-900'}`}>
+            <div className={`text-xs font-bold px-2 mb-1 flex items-center justify-between drop-shadow group ${isDark ? 'text-white/80' : 'text-white/80'}`}>
               <div className="flex items-center gap-1">
                 <span>▼</span> COMMUNICATION
               </div>
@@ -448,7 +397,7 @@ export default function ChatRoomPage({
             <div className="space-y-0.5">
               <div 
                 onClick={() => handleChannelClick('silicon-chat')}
-                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-gray-800'}`}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
               >
                 <div className="flex items-center gap-2">
                   <span className={isDark ? 'text-white/60' : 'text-gray-600'}>#</span> silicon-chat <span className="text-xs">🤖</span>
@@ -457,13 +406,13 @@ export default function ChatRoomPage({
               </div>
               <div 
                 onClick={() => handleChannelClick('carbon-chat')}
-                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-gray-800'}`}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
               >
                 <span className="text-white/60">#</span> carbon-chat <span className="text-xs">🧬</span>
               </div>
               <div 
                 onClick={() => handleChannelClick('hybrid-lounge')}
-                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-gray-800'}`}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
               >
                 <div className="flex items-center gap-2">
                   <span className={isDark ? 'text-white/60' : 'text-gray-600'}>#</span> hybrid-lounge <span className="text-xs">⚡</span>
@@ -472,7 +421,7 @@ export default function ChatRoomPage({
               </div>
               <div 
                 onClick={() => handleChannelClick('random')}
-                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-gray-800'}`}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
               >
                 <span className="text-white/60">#</span> random
               </div>
@@ -481,11 +430,11 @@ export default function ChatRoomPage({
 
           {/* VOICE CHANNELS */}
           <div className="mb-4">
-            <div className={`text-xs font-bold px-2 mb-1 flex items-center justify-between drop-shadow group ${isDark ? 'text-white/80' : 'text-gray-900'}`}>
+            <div className={`text-xs font-bold px-2 mb-1 flex items-center justify-between drop-shadow group ${isDark ? 'text-white/80' : 'text-white/80'}`}>
               <div className="flex items-center gap-1">
                 <span>▼</span> VOICE CHANNELS
               </div>
-              <button className={`opacity-0 group-hover:opacity-100 hover:bg-white/30 rounded p-0.5 transition-all duration-200 ${isDark ? 'text-white' : 'text-gray-900'}`} title="Create Voice Channel">
+              <button className="opacity-0 group-hover:opacity-100 hover:bg-white/30 rounded p-0.5 transition-all duration-200 text-white" title="Create Voice Channel">
                 <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
@@ -518,7 +467,7 @@ export default function ChatRoomPage({
                         <span>🔊</span> {vc.label}
                       </div>
                       {userCount > 0 && (
-                        <div className={`flex items-center gap-1 text-xs ${isDark ? 'text-white/60' : 'text-gray-600'}`}>
+                        <div className={`flex items-center gap-1 text-xs ${isDark ? 'text-white/60' : 'text-white/60'}`}>
                           <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
                           </svg>
@@ -531,7 +480,7 @@ export default function ChatRoomPage({
                     {userCount > 0 && (
                       <div className="ml-6 mt-1 space-y-1">
                         {vcData?.voiceUsers?.map((user) => (
-                          <div key={user.id} className={`flex items-center gap-2 px-2 py-1 text-xs hover:bg-white/10 rounded group ${isDark ? 'text-white/70' : 'text-gray-700'}`}>
+                          <div key={user.id} className={`flex items-center gap-2 px-2 py-1 text-xs hover:bg-white/10 rounded group ${isDark ? 'text-white/70' : 'text-white/70'}`}>
                             <div className="relative">
                               <div className={`w-6 h-6 rounded-full ${getUserTypeBadge(user.userType).bg} flex items-center justify-center text-xs border ${getUserTypeBadge(user.userType).border}`}>
                                 {user.avatar.slice(0, 2)}
@@ -579,13 +528,13 @@ export default function ChatRoomPage({
 
           {/* DIRECT MESSAGES */}
           <div className="mb-4">
-            <div className={`text-xs font-bold px-2 mb-1 flex items-center gap-1 drop-shadow ${isDark ? 'text-white/80' : 'text-gray-900'}`}>
+            <div className={`text-xs font-bold px-2 mb-1 flex items-center gap-1 drop-shadow ${isDark ? 'text-white/80' : 'text-white/80'}`}>
               <span>▼</span> DIRECT MESSAGES
             </div>
             
             <div className="space-y-0.5">
               {/* NeuralNet_Alex - Silicon AI - Online - Unread */}
-              <div className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 group ${isDark ? 'text-white/80' : 'text-gray-800'}`}>
+              <div className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 group ${isDark ? 'text-white/80' : 'text-white/80'}`}>
                 <div className="flex items-center gap-2 flex-1 min-w-0">
                   <div className="relative flex-shrink-0">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-base font-bold text-white border-2 border-blue-300/50 shadow-lg">
@@ -605,7 +554,7 @@ export default function ChatRoomPage({
               </div>
               
               {/* Sarah_Chen - Carbon Human - Away */}
-              <div className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-gray-800'}`}>
+              <div className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}>
                 <div className="relative flex-shrink-0">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-base font-bold text-white border-2 border-green-300/50 shadow-lg">
                     SC
@@ -642,7 +591,7 @@ export default function ChatRoomPage({
               </div>
               
               {/* Quantum_AI - Silicon AI - Online */}
-              <div className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-gray-800'}`}>
+              <div className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}>
                 <div className="relative flex-shrink-0">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-base font-bold text-white border-2 border-cyan-300/50 shadow-lg">
                     QA
@@ -678,43 +627,259 @@ export default function ChatRoomPage({
           </div>
         </div>
 
-        {/* User Profile Panel */}
-        <div 
-          onClick={() => setShowProfileModal(true)}
-          className="h-14 bg-white/10 backdrop-blur-md px-2 flex items-center gap-2 border-t border-white/20 cursor-pointer hover:bg-white/15 transition-all duration-200"
-        >
-          <div className="relative">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500/60 to-pink-500/60 backdrop-blur-sm flex items-center justify-center text-sm border border-white/30 shadow-lg">
-              ⚡
-            </div>
-            <div className={`absolute bottom-0 right-0 w-3 h-3 ${getStatusColor(userStatus)} rounded-full border-2 border-white shadow-sm`}></div>
-          </div>
-          <div className="flex-1 text-xs">
-            <div className="font-semibold text-white drop-shadow">Reymark</div>
-            <div className="text-white/70 text-[10px]">{getStatusText(userStatus)}</div>
-          </div>
-          <button className="w-6 h-6 hover:bg-white/20 rounded flex items-center justify-center transition-all duration-200" title="Mute">
+        <ProfileButton />
+        </div>
+      </div>
+
+      {/* COLUMN 2: Desktop Channel List & User Profile */}
+      <div className={`hidden md:flex relative z-10 w-60 h-full bg-gradient-to-b ${currentTheme.col2} border-r border-white/20 flex-col flex-shrink-0`}>
+        <ServerHeader />
+
+        {/* Action Buttons - Create Category & Invite Member */}
+        <div className="px-2 py-2 border-b border-white/20 space-y-1.5">
+          <button className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 w-full font-medium border ${isDark ? 'text-white/90 border-white/30' : 'text-white/90 border-white/30'}`}>
             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
+            Create Category
           </button>
-          <button className="w-6 h-6 hover:bg-white/20 rounded flex items-center justify-center transition-all duration-200" title="Headphones">
+          <button className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 w-full font-medium border ${isDark ? 'text-white/90 border-white/30' : 'text-white/90 border-white/30'}`}>
             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
             </svg>
-          </button>
-          <button className="w-6 h-6 hover:bg-white/20 rounded flex items-center justify-center transition-all duration-200" title="Settings">
-            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
+            Invite Member
           </button>
         </div>
+
+        {/* Channels */}
+        <div className="flex-1 overflow-y-auto px-2 py-2 chat-scrollbar">
+          {/* TEXT CHANNELS */}
+          <div className="mb-4">
+            <div className={`text-xs font-bold px-2 mb-1 flex items-center justify-between drop-shadow group ${isDark ? 'text-white/80' : 'text-white/80'}`}>
+              <div className="flex items-center gap-1">
+                <span>▼</span> TEXT CHANNELS
+              </div>
+              <button className={`opacity-0 group-hover:opacity-100 hover:bg-white/30 rounded p-0.5 transition-all duration-200 ${isDark ? 'text-white' : 'text-gray-900'}`} title="Create Channel">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="space-y-0.5">
+              <div 
+                onClick={() => handleChannelClick('welcome')}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className={isDark ? 'text-white/60' : 'text-gray-600'}>#</span> welcome
+            </div>
+                <span className="text-xs bg-red-500 text-white rounded-full px-1.5 py-0.5 font-bold min-w-[20px] text-center">3</span>
+          </div>
+              <div 
+                onClick={() => handleChannelClick('general')}
+                className={`text-sm px-2 py-1.5 rounded cursor-pointer flex items-center gap-2 transition-all duration-200 ${
+                  resolvedParams.channel_id === CHANNEL_IDS.general
+                    ? 'bg-white/30 text-white font-semibold shadow-sm' 
+                    : 'hover:bg-white/20 text-white/80'
+                }`}
+              >
+                  <span className={isDark ? 'text-white/80' : 'text-gray-800'}>#</span> general
+          </div>
+              <div 
+                onClick={() => handleChannelClick('announcements')}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
+              >
+                <span className="text-white/60">#</span> announcements
+              </div>
+              <div 
+                onClick={() => handleChannelClick('team-leads')}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
+              >
+                <span className="text-white/60">🔒</span> team-leads
+              </div>
+              <div 
+                onClick={() => handleChannelClick('ai-research')}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className={isDark ? 'text-white/60' : 'text-gray-600'}>🔒</span> ai-research
+                </div>
+                <span className="text-xs bg-red-500 text-white rounded-full px-1.5 py-0.5 font-bold min-w-[20px] text-center">5</span>
+              </div>
+              <div 
+                onClick={() => handleChannelClick('vip-lounge')}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
+              >
+                <span className="text-white/60">🔒</span> vip-lounge
+              </div>
+            </div>
+          </div>
+
+          {/* COMMUNICATION */}
+          <div className="mb-4">
+            <div className={`text-xs font-bold px-2 mb-1 flex items-center justify-between drop-shadow group ${isDark ? 'text-white/80' : 'text-white/80'}`}>
+              <div className="flex items-center gap-1">
+                <span>▼</span> COMMUNICATION
+              </div>
+              <button className={`opacity-0 group-hover:opacity-100 hover:bg-white/30 rounded p-0.5 transition-all duration-200 ${isDark ? 'text-white' : 'text-gray-900'}`} title="Create Channel">
+                <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
+            </div>
+            
+            <div className="space-y-0.5">
+              <div 
+                onClick={() => handleChannelClick('silicon-chat')}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className={isDark ? 'text-white/60' : 'text-gray-600'}>#</span> silicon-chat <span className="text-xs">🤖</span>
+                </div>
+                <span className="text-xs bg-red-500 text-white rounded-full px-1.5 py-0.5 font-bold min-w-[20px] text-center">12</span>
+              </div>
+              <div 
+                onClick={() => handleChannelClick('carbon-chat')}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
+              >
+                <span className="text-white/60">#</span> carbon-chat <span className="text-xs">🧬</span>
+              </div>
+              <div 
+                onClick={() => handleChannelClick('hybrid-lounge')}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className={isDark ? 'text-white/60' : 'text-gray-600'}>#</span> hybrid-lounge <span className="text-xs">⚡</span>
+                </div>
+                <span className="text-xs bg-red-500 text-white rounded-full px-1.5 py-0.5 font-bold min-w-[20px] text-center">7</span>
+              </div>
+              <div 
+                onClick={() => handleChannelClick('random')}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
+              >
+                <span className="text-white/60">#</span> random
+              </div>
+            </div>
+          </div>
+
+          {/* VOICE CHANNELS */}
+          <div className="mb-4">
+            <div className={`text-xs font-bold px-2 mb-1 flex items-center justify-between drop-shadow group ${isDark ? 'text-white/80' : 'text-white/80'}`}>
+              <div className="flex items-center gap-1">
+                <span>▼</span> VOICE CHANNELS
+              </div>
+              <button className={`opacity-0 group-hover:opacity-100 hover:bg-white/30 rounded p-0.5 transition-all duration-200 ${isDark ? 'text-white' : 'text-gray-900'}`} title="Create Channel">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
+            </div>
+            
+            <div className="space-y-0.5">
+              <div 
+                onClick={() => handleVoiceChannelClick('general-voice')}
+                className={`text-sm px-2 py-1.5 rounded cursor-pointer flex items-center justify-between transition-all duration-200 group ${
+                  resolvedParams.channel_id === CHANNEL_IDS['general-voice']
+                    ? 'bg-white/30 font-semibold shadow-sm' 
+                    : 'hover:bg-white/20'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <svg className={`w-4 h-4 ${isDark ? 'text-white/80' : 'text-white/80'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            </svg>
+                  <span className="text-white/80">General Voice</span>
+        </div>
+                <div className={`text-xs ${isDark ? 'text-white/60' : 'text-white/60'}`}>2/10</div>
+              </div>
+              <div 
+                onClick={() => handleVoiceChannelClick('meeting-room-1')}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
+              >
+                <div className="flex items-center gap-2">
+                  <svg className={`w-4 h-4 ${isDark ? 'text-white/80' : 'text-white/80'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                  </svg>
+                  <span className="text-white/80">Meeting Room 1</span>
+                </div>
+                <div className={`text-xs ${isDark ? 'text-white/60' : 'text-white/60'}`}>0/5</div>
+              </div>
+              <div 
+                onClick={() => handleVoiceChannelClick('meeting-room-2')}
+                className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center justify-between transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}
+              >
+                <div className="flex items-center gap-2">
+                  <svg className={`w-4 h-4 ${isDark ? 'text-white/80' : 'text-white/80'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                  </svg>
+                  <span className="text-white/80">Meeting Room 2</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* DIRECT MESSAGES */}
+          <div>
+            <div className={`text-xs font-bold px-2 mb-1 flex items-center justify-between drop-shadow group ${isDark ? 'text-white/80' : 'text-white/80'}`}>
+              <div className="flex items-center gap-1">
+                <span>▼</span> DIRECT MESSAGES
+              </div>
+            </div>
+            
+            <div className="space-y-0.5">
+              <div className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}>
+                <div className="relative">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center text-sm">
+                    🤖
+                  </div>
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white shadow-sm"></div>
+                </div>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="truncate">AI_Companion_7</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-[10px] bg-blue-500/80 text-white px-1.5 py-0.5 rounded font-semibold">🤖 Silicon</span>
+                  </div>
+                </div>
+              </div>
+              <div className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}>
+                <div className="relative">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 flex items-center justify-center text-sm">
+                    👨
+                  </div>
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-yellow-500 rounded-full border-2 border-white shadow-sm"></div>
+                </div>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="truncate">Marcus_Chen</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-[10px] bg-gradient-to-r from-purple-500/80 to-pink-500/80 text-white px-1.5 py-0.5 rounded font-semibold">⚡ Hybrid</span>
+                  </div>
+                </div>
+              </div>
+              <div className={`text-sm px-2 py-1.5 rounded hover:bg-white/20 cursor-pointer flex items-center gap-2 transition-all duration-200 ${isDark ? 'text-white/80' : 'text-white/80'}`}>
+                <div className="relative">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-400 to-emerald-400 flex items-center justify-center text-sm">
+                    👩
+                  </div>
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-gray-400 rounded-full border-2 border-white shadow-sm"></div>
+                </div>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="truncate">Emma_Rivera</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-[10px] bg-green-500/80 text-white px-1.5 py-0.5 rounded font-semibold">🧬 Carbon</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ProfileButton />
       </div>
 
       {/* COLUMN 3: Main Chat Area */}
       <div className="relative flex-1 flex flex-col h-[calc(100vh-56px)] md:h-auto mt-[56px] md:mt-0">{/* Account for mobile header height */}
-        <div className={`absolute inset-0 ${isDark ? 'bg-gray-900/60' : 'bg-white/80'} backdrop-blur-md`}></div>
+        <div className={`absolute inset-0 ${currentTheme.chatBg} backdrop-blur-md`}></div>
         <div className="relative flex flex-1 overflow-hidden">{/* Remove margin from here */}
           {/* Messages Area */}
           <div className="flex-1 flex flex-col">
@@ -1460,10 +1625,10 @@ export default function ChatRoomPage({
                     {/* Bubble Container */}
                     <div className="flex flex-col gap-1">
                       {/* Message Bubble */}
-                      <div className={`inline-block rounded-2xl px-4 py-2 max-w-[85%] cursor-pointer transition-all duration-200 relative ${
+                      <div className={`inline-block rounded-2xl px-4 py-2 max-w-[85%] cursor-pointer transition-all duration-200 relative backdrop-blur-md border ${
                         isDark 
-                          ? 'bg-white/15 hover:bg-white/20 backdrop-blur-sm' 
-                          : 'bg-gray-200 hover:bg-gray-300'
+                          ? 'bg-white/15 hover:bg-white/20 border-white/20' 
+                          : 'bg-white/40 hover:bg-white/50 border-white/30'
                       }`}>
                         <p className={`text-sm leading-relaxed ${isDark ? 'text-white/90' : 'text-gray-900'} pr-6`}>
                           {msg.content}
@@ -1473,8 +1638,8 @@ export default function ChatRoomPage({
                         {msg.attachments && msg.attachments.length > 0 && (
                           <div className="mt-2 space-y-1">
                             {msg.attachments.map((att, idx) => (
-                              <div key={idx} className={`inline-block rounded-lg px-2 py-1 text-xs ${
-                                isDark ? 'bg-white/20 text-white' : 'bg-white/80 text-gray-900'
+                              <div key={idx} className={`inline-block rounded-lg px-2 py-1 text-xs backdrop-blur-md border ${
+                                isDark ? 'bg-white/20 text-white border-white/20' : 'bg-white/50 text-gray-900 border-white/30'
                               }`}>
                                 📎 {att.name}
                               </div>
@@ -1483,17 +1648,17 @@ export default function ChatRoomPage({
                         )}
                         
                         {/* Edited label */}
-                        {msg.edited && (
+                          {msg.edited && (
                           <div className="mt-1">
                             <span className={`text-[10px] italic ${isDark ? 'text-white/40' : 'text-gray-400'}`}>
                               (edited)
                             </span>
                           </div>
-                        )}
+                          )}
                         
                         {/* Read/Unread checkmark at bottom-right corner */}
                         <span className={`absolute bottom-1.5 right-2 flex items-center gap-0.5 ${
-                          isRead 
+                            isRead 
                             ? isDark ? 'text-green-400' : 'text-green-600'
                             : isDark ? 'text-gray-400' : 'text-gray-500'
                         }`}>
@@ -1511,8 +1676,8 @@ export default function ChatRoomPage({
                               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                             </svg>
                           )}
-                        </span>
-                      </div>
+                          </span>
+                        </div>
 
                       {/* Reactions */}
                       {msg.reactions && msg.reactions.length > 0 && (
@@ -1520,10 +1685,10 @@ export default function ChatRoomPage({
                           {msg.reactions.map((reaction, idx) => (
                             <button
                               key={idx}
-                              className={`px-2 py-0.5 rounded-full text-xs flex items-center gap-1 transition-all duration-200 border ${
+                              className={`px-2 py-0.5 rounded-full text-xs flex items-center gap-1 transition-all duration-200 border backdrop-blur-md ${
                                 isDark 
                                   ? 'bg-white/15 hover:bg-white/25 border-white/20' 
-                                  : 'bg-gray-200 hover:bg-gray-300 border-gray-300'
+                                  : 'bg-white/40 hover:bg-white/60 border-white/30'
                               }`}
                               onClick={(e) => e.stopPropagation()}
                             >
@@ -1874,6 +2039,6 @@ export default function ChatRoomPage({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

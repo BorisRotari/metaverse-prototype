@@ -1,0 +1,189 @@
+"use client";
+
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+
+type ColorMode = 'light' | 'dark' | 'system';
+type Theme = 'blue' | 'purple' | 'green' | 'orange' | 'pink';
+
+interface ThemeContextType {
+  colorMode: ColorMode;
+  setColorMode: (mode: ColorMode) => void;
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+  isDark: boolean;
+  currentTheme: any;
+  themes: any;
+}
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [colorMode, setColorModeState] = useState<ColorMode>('dark');
+  const [theme, setThemeState] = useState<Theme>('blue');
+
+  // Load from localStorage
+  useEffect(() => {
+    const savedColorMode = localStorage.getItem('colorMode');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedColorMode) setColorModeState(savedColorMode as ColorMode);
+    if (savedTheme) setThemeState(savedTheme as Theme);
+  }, []);
+
+  // Persist to localStorage
+  useEffect(() => {
+    localStorage.setItem('colorMode', colorMode);
+  }, [colorMode]);
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const themes = {
+    blue: {
+      light: { 
+        col1: 'from-cyan-600 to-blue-700', 
+        col2: 'from-cyan-700 to-blue-800', 
+        iconColor: 'text-white', 
+        iconColorDark: 'text-white',
+        accentBg: 'bg-cyan-500/30',
+        accentRing: 'ring-cyan-300',
+        accentHover: 'hover:bg-cyan-400/40',
+        divider: 'bg-cyan-200/50',
+        chatBg: 'bg-cyan-50/80'
+      },
+      dark: { 
+        col1: 'from-cyan-600 to-blue-700', 
+        col2: 'from-cyan-700 to-blue-800', 
+        iconColor: 'text-gray-700', 
+        iconColorDark: 'text-white',
+        accentBg: 'bg-cyan-500/30',
+        accentRing: 'ring-cyan-300',
+        accentHover: 'hover:bg-cyan-400/40',
+        divider: 'bg-cyan-200/50',
+        chatBg: 'bg-gray-900/60'
+      }
+    },
+    purple: {
+      light: { 
+        col1: 'from-purple-600 to-pink-700', 
+        col2: 'from-purple-700 to-pink-800', 
+        iconColor: 'text-white', 
+        iconColorDark: 'text-white',
+        accentBg: 'bg-purple-500/30',
+        accentRing: 'ring-purple-300',
+        accentHover: 'hover:bg-purple-400/40',
+        divider: 'bg-purple-200/50',
+        chatBg: 'bg-purple-50/80'
+      },
+      dark: { 
+        col1: 'from-purple-600 to-pink-700', 
+        col2: 'from-purple-700 to-pink-800', 
+        iconColor: 'text-gray-700', 
+        iconColorDark: 'text-white',
+        accentBg: 'bg-purple-500/30',
+        accentRing: 'ring-purple-300',
+        accentHover: 'hover:bg-purple-400/40',
+        divider: 'bg-purple-200/50',
+        chatBg: 'bg-gray-900/60'
+      }
+    },
+    green: {
+      light: { 
+        col1: 'from-emerald-600 to-teal-700', 
+        col2: 'from-emerald-700 to-teal-800', 
+        iconColor: 'text-white', 
+        iconColorDark: 'text-white',
+        accentBg: 'bg-emerald-500/30',
+        accentRing: 'ring-emerald-300',
+        accentHover: 'hover:bg-emerald-400/40',
+        divider: 'bg-emerald-200/50',
+        chatBg: 'bg-emerald-50/80'
+      },
+      dark: { 
+        col1: 'from-emerald-600 to-teal-700', 
+        col2: 'from-emerald-700 to-teal-800', 
+        iconColor: 'text-gray-700', 
+        iconColorDark: 'text-white',
+        accentBg: 'bg-emerald-500/30',
+        accentRing: 'ring-emerald-300',
+        accentHover: 'hover:bg-emerald-400/40',
+        divider: 'bg-emerald-200/50',
+        chatBg: 'bg-gray-900/60'
+      }
+    },
+    orange: {
+      light: { 
+        col1: 'from-orange-600 to-amber-700', 
+        col2: 'from-orange-700 to-amber-800', 
+        iconColor: 'text-white', 
+        iconColorDark: 'text-white',
+        accentBg: 'bg-orange-500/30',
+        accentRing: 'ring-orange-300',
+        accentHover: 'hover:bg-orange-400/40',
+        divider: 'bg-orange-200/50',
+        chatBg: 'bg-orange-50/80'
+      },
+      dark: { 
+        col1: 'from-orange-600 to-amber-700', 
+        col2: 'from-orange-700 to-amber-800', 
+        iconColor: 'text-gray-700', 
+        iconColorDark: 'text-white',
+        accentBg: 'bg-orange-500/30',
+        accentRing: 'ring-orange-300',
+        accentHover: 'hover:bg-orange-400/40',
+        divider: 'bg-orange-200/50',
+        chatBg: 'bg-gray-900/60'
+      }
+    },
+    pink: {
+      light: { 
+        col1: 'from-pink-600 to-fuchsia-700', 
+        col2: 'from-pink-700 to-fuchsia-800', 
+        iconColor: 'text-white', 
+        iconColorDark: 'text-white',
+        accentBg: 'bg-pink-500/30',
+        accentRing: 'ring-pink-300',
+        accentHover: 'hover:bg-pink-400/40',
+        divider: 'bg-pink-200/50',
+        chatBg: 'bg-pink-50/80'
+      },
+      dark: { 
+        col1: 'from-pink-600 to-fuchsia-700', 
+        col2: 'from-pink-700 to-fuchsia-800', 
+        iconColor: 'text-gray-700', 
+        iconColorDark: 'text-white',
+        accentBg: 'bg-pink-500/30',
+        accentRing: 'ring-pink-300',
+        accentHover: 'hover:bg-pink-400/40',
+        divider: 'bg-pink-200/50',
+        chatBg: 'bg-gray-900/60'
+      }
+    }
+  };
+
+  const isDark = colorMode === 'dark' || (colorMode === 'system' && true);
+  const currentTheme = themes[theme][isDark ? 'dark' : 'light'];
+
+  const setColorMode = (mode: ColorMode) => {
+    setColorModeState(mode);
+  };
+
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme);
+  };
+
+  return (
+    <ThemeContext.Provider value={{ colorMode, setColorMode, theme, setTheme, isDark, currentTheme, themes }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+export function useTheme() {
+  const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
+}
+
