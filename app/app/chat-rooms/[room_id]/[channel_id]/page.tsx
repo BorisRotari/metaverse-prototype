@@ -300,22 +300,32 @@ export default function ChatRoomPage({
           </svg>
         </button>
         
+        {/* Shopping */}
+        <button 
+          onClick={() => setSelectedServer("shop")}
+          className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${selectedServer === "shop" ? `!${currentTheme.accentBg} ${currentTheme.accentRing} ring-2` : ""}`}
+        >
+          <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </button>
+        
+        {/* Skill Card */}
+        <button 
+          onClick={() => setSelectedServer("skillcard")}
+          className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${selectedServer === "skillcard" ? `!${currentTheme.accentBg} ${currentTheme.accentRing} ring-2` : ""}`}
+        >
+          <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+        </button>
+
         <button 
           onClick={() => setSelectedServer("quest")}
           className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${selectedServer === "quest" ? `!${currentTheme.accentBg} ${currentTheme.accentRing} ring-2` : ""}`}
         >
           <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </button>
-        
-        <button 
-          onClick={() => setSelectedServer("workshop")}
-          className={`w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl flex items-center justify-center transition-all duration-200 relative ${selectedServer === "workshop" ? `!${currentTheme.accentBg} ${currentTheme.accentRing} ring-2` : ""}`}
-        >
-          <svg className={`w-5 h-5 ${isDark ? currentTheme.iconColorDark : currentTheme.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
         </button>
         
@@ -1450,12 +1460,12 @@ export default function ChatRoomPage({
                     {/* Bubble Container */}
                     <div className="flex flex-col gap-1">
                       {/* Message Bubble */}
-                      <div className={`inline-block rounded-2xl px-4 py-2 max-w-[85%] cursor-pointer transition-all duration-200 ${
+                      <div className={`inline-block rounded-2xl px-4 py-2 max-w-[85%] cursor-pointer transition-all duration-200 relative ${
                         isDark 
                           ? 'bg-white/15 hover:bg-white/20 backdrop-blur-sm' 
                           : 'bg-gray-200 hover:bg-gray-300'
                       }`}>
-                        <p className={`text-sm leading-relaxed ${isDark ? 'text-white/90' : 'text-gray-900'}`}>
+                        <p className={`text-sm leading-relaxed ${isDark ? 'text-white/90' : 'text-gray-900'} pr-6`}>
                           {msg.content}
                         </p>
 
@@ -1471,28 +1481,38 @@ export default function ChatRoomPage({
                             ))}
                           </div>
                         )}
-                      </div>
-
-                      {/* Timestamp and Read Status - Show on click */}
-                      {isExpanded && (
-                        <div className="flex items-center gap-2 px-2 animate-fadeIn">
-                          <span className={`text-[10px] ${isDark ? 'text-white/50' : 'text-gray-500'}`}>
-                            {msg.timestamp}
-                          </span>
-                          {msg.edited && (
+                        
+                        {/* Edited label */}
+                        {msg.edited && (
+                          <div className="mt-1">
                             <span className={`text-[10px] italic ${isDark ? 'text-white/40' : 'text-gray-400'}`}>
                               (edited)
                             </span>
+                          </div>
+                        )}
+                        
+                        {/* Read/Unread checkmark at bottom-right corner */}
+                        <span className={`absolute bottom-1.5 right-2 flex items-center gap-0.5 ${
+                          isRead 
+                            ? isDark ? 'text-green-400' : 'text-green-600'
+                            : isDark ? 'text-gray-400' : 'text-gray-500'
+                        }`}>
+                          {isRead ? (
+                            <>
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                              <svg className="w-3 h-3 -ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </>
+                          ) : (
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
                           )}
-                          <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
-                            isRead 
-                              ? isDark ? 'bg-green-500/20 text-green-300' : 'bg-green-100 text-green-700'
-                              : isDark ? 'bg-gray-500/20 text-gray-300' : 'bg-gray-100 text-gray-700'
-                          }`}>
-                            {isRead ? '✓ Read' : 'Unread'}
-                          </span>
-                        </div>
-                      )}
+                        </span>
+                      </div>
 
                       {/* Reactions */}
                       {msg.reactions && msg.reactions.length > 0 && (
